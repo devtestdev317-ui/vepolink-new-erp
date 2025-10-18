@@ -13,7 +13,7 @@ interface PayrollListProps {
     onDownload: (payroll: PayrollRecord) => void;
 }
 
-export const PayrollList: React.FC<PayrollListProps> = ({ payrolls, onEdit, onView, onDownload }) => {
+export const PayrollList: React.FC<PayrollListProps> = ({ payrolls, onEdit, onView }) => {
     const getStatusVariant = (status: PayrollRecord['status']) => {
         switch (status) {
             case 'approved': return 'default';
