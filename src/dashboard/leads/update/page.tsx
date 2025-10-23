@@ -1,10 +1,10 @@
 import { DashboardStrip } from "@/components/custom/DashboardStrip";
-import { Card } from "@/components/ui/card";
+import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import * as React from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { BadgeAlert } from 'lucide-react';
+import { BadgeAlert, Eye } from 'lucide-react';
 
 import { SalesManagerLeadData } from "../../../dummy-data/SalesManagerDummyLeadData"
 import { SalesManagerLeadSchema } from "../../../schema/SalesManagerLeadSchema"
@@ -693,6 +693,68 @@ export default function UpdateLeadPage() {
                                 </FormItem>
                             )}
                         />
+                        <div className="w-full px-2">
+                            <Card className="rounded shadow-none p-4 ">
+                                <CardTitle>Item Order Detail</CardTitle>
+                                <CardDescription>
+                                    <Card className="rounded shadow-none p-4 mb-2">
+                                        <CardTitle>Item #1</CardTitle>
+                                        <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-3">
+                                            <div className="flex flex-col space-y-2">
+                                                <FormLabel className="text-slate-700 font-medium">Item Name</FormLabel>
+                                                <div className="px-2 py-2.5 border rounded text-[#0a0a0a]">
+                                                    Optimics Analyzer
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-col space-y-2">
+                                                <FormLabel className="text-slate-700 font-medium">Quantity</FormLabel>
+                                                <div className="px-2 py-2.5 border rounded text-[#0a0a0a]">
+                                                    200
+                                                </div>
+                                            </div>
+                                            <FormField
+                                                control={form.control}
+                                                name="inspectionStatus"
+                                                render={({ field }) => (
+                                                    <FormItem className="flex flex-col space-y-2">
+                                                        <FormLabel className="text-slate-700 font-medium mb-0">Store</FormLabel>
+                                                        <Select
+
+                                                            onValueChange={field.onChange}
+                                                            defaultValue={field.value}
+
+                                                        >
+                                                            <FormControl>
+                                                                <SelectTrigger className="w-full min-h-[40px] rounded">
+                                                                    <SelectValue placeholder="Select Store" />
+                                                                </SelectTrigger>
+                                                            </FormControl>
+                                                            <SelectContent>
+                                                                {
+                                                                    ["Available", "Order"].map((leadType) => (
+                                                                        <SelectItem key={leadType} value={leadType}>{leadType}</SelectItem>
+                                                                    ))
+                                                                }
+                                                            </SelectContent>
+                                                        </Select>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+                                            <div className="flex flex-col space-y-2">
+                                                <FormLabel className="text-slate-700 font-medium">Specification</FormLabel>
+                                                <div className="px-2 py-2.5 border rounded text-[#0a0a0a] relative cursor-pointer">
+                                                    View All Specifications
+                                                    <Button variant={"default"} className="absolute cursor-pointer right-0 top-0 bottom-0 w-[41px] rounded-none h-[41px] border-0"><Eye className="size-5" /></Button>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </Card>
+                                </CardDescription>
+                            </Card>
+
+                        </div>
 
                         <div className="w-full flex flex-col items-end justify-end">
                             <Button type="submit" className="cursor-pointer">Update</Button>
