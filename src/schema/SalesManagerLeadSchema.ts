@@ -68,7 +68,12 @@ export const SalesManagerLeadSchema = z.object({
     attachedPI: z.string().optional(),
     callStatus: z.string().optional(),
     status: z.boolean(),
+    storeStatus: z.enum(["Available", "Order"]).optional(),
+    deliveryDate: z.date().optional(),
+
 });
+
+
 
 export type SalesManagerLead = z.infer<typeof SalesManagerLeadSchema>;
 

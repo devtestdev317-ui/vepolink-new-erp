@@ -35,7 +35,15 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
-
+import {
+    AlertDialog,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import {
     Select,
     SelectContent,
@@ -44,7 +52,17 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-
+import { FormDatePicker } from "@/components/custom/form-date-picker";
+import type { ItemSpecification } from "@/dummy-data/ItemRequirementDet";
+import { ItemRequirementDetails } from "@/dummy-data/ItemRequirementDet";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table"
 export default function UpdateLeadPage() {
     const { id } = useParams<{ id: string }>();
     const lead = SalesManagerLeadData.find(lead => lead.leadId === id);
@@ -74,6 +92,8 @@ export default function UpdateLeadPage() {
             remark: lead?.remark || "",
             siteVisit: lead?.siteVisit,
             status: lead?.status || false,
+            storeStatus: lead?.storeStatus || "Available",
+            deliveryDate: lead?.deliveryDate ? new Date(lead.deliveryDate) : undefined,
         },
     })
     function onSubmit(values: z.infer<typeof SalesManagerLeadSchema>) {
@@ -139,7 +159,18 @@ export default function UpdateLeadPage() {
         form.clearErrors();
     }
     const [callStatus, SetCallStatus] = React.useState(lead?.enquiryStatus);
-    const [ServiceStatus, SetServiceStatus] = React.useState(lead?.siteVisit)
+    const [ServiceStatus, SetServiceStatus] = React.useState(lead?.siteVisit);
+
+
+
+    const dummyItemDetails: ItemSpecification[] = ItemRequirementDetails;
+    const [OpenSpecModel, setOpenSpecModel] = React.useState(false);
+    const [selectedItem, setSelectedItem] = React.useState<ItemSpecification | null>(null);
+    function ViewSpecification(id: number) {
+        const item = dummyItemDetails.find(item => item.id === id);
+        setSelectedItem(item || null);
+        setOpenSpecModel(!OpenSpecModel);
+    }
     return (
         <div className="w-full lg:p-7 p-2">
             <DashboardStrip title="Pre-sales/Leads: Update Lead" />
@@ -697,60 +728,68 @@ export default function UpdateLeadPage() {
                             <Card className="rounded shadow-none p-4 ">
                                 <CardTitle>Item Order Detail</CardTitle>
                                 <CardDescription>
-                                    <Card className="rounded shadow-none p-4 mb-2">
-                                        <CardTitle>Item #1</CardTitle>
-                                        <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-3">
-                                            <div className="flex flex-col space-y-2">
-                                                <FormLabel className="text-slate-700 font-medium">Item Name</FormLabel>
-                                                <div className="px-2 py-2.5 border rounded text-[#0a0a0a]">
-                                                    Optimics Analyzer
-                                                </div>
-                                            </div>
-                                            <div className="flex flex-col space-y-2">
-                                                <FormLabel className="text-slate-700 font-medium">Quantity</FormLabel>
-                                                <div className="px-2 py-2.5 border rounded text-[#0a0a0a]">
-                                                    200
-                                                </div>
-                                            </div>
-                                            <FormField
-                                                control={form.control}
-                                                name="inspectionStatus"
-                                                render={({ field }) => (
-                                                    <FormItem className="flex flex-col space-y-2">
-                                                        <FormLabel className="text-slate-700 font-medium mb-0">Store</FormLabel>
-                                                        <Select
+                                    {
+                                        dummyItemDetails.map((item, i) =>
+                                            <Card className="rounded shadow-none p-4 mb-2" key={item.id}>
+                                                <CardTitle>Item #{i + 1}</CardTitle>
+                                                <div className="grid lg:grid-cols-5 md:grid-cols-2 grid-cols-1 gap-3">
+                                                    <div className="flex flex-col space-y-2">
+                                                        <FormLabel className="text-slate-700 font-medium">Item Name</FormLabel>
+                                                        <div className="px-2 py-2.5 border rounded text-[#0a0a0a]">{item.itemName}</div>
+                                                    </div>
+                                                    <div className="flex flex-col space-y-2">
+                                                        <FormLabel className="text-slate-700 font-medium">Quantity</FormLabel>
+                                                        <div className="px-2 py-2.5 border rounded text-[#0a0a0a]">{item.quantity}</div>
+                                                    </div>
+                                                    <FormField
+                                                        control={form.control}
+                                                        name="storeStatus"
+                                                        render={({ field }) => (
+                                                            <FormItem className="flex flex-col space-y-2">
+                                                                <FormLabel className="text-slate-700 font-medium mb-0">Store</FormLabel>
+                                                                <Select
 
-                                                            onValueChange={field.onChange}
-                                                            defaultValue={field.value}
+                                                                    onValueChange={field.onChange}
+                                                                    defaultValue={field.value}
 
-                                                        >
-                                                            <FormControl>
-                                                                <SelectTrigger className="w-full min-h-[40px] rounded">
-                                                                    <SelectValue placeholder="Select Store" />
-                                                                </SelectTrigger>
-                                                            </FormControl>
-                                                            <SelectContent>
-                                                                {
-                                                                    ["Available", "Order"].map((leadType) => (
-                                                                        <SelectItem key={leadType} value={leadType}>{leadType}</SelectItem>
-                                                                    ))
-                                                                }
-                                                            </SelectContent>
-                                                        </Select>
-                                                        <FormMessage />
-                                                    </FormItem>
-                                                )}
-                                            />
-                                            <div className="flex flex-col space-y-2">
-                                                <FormLabel className="text-slate-700 font-medium">Specification</FormLabel>
-                                                <div className="px-2 py-2.5 border rounded text-[#0a0a0a] relative cursor-pointer">
-                                                    View All Specifications
-                                                    <Button variant={"default"} className="absolute cursor-pointer right-0 top-0 bottom-0 w-[41px] rounded-none h-[41px] border-0"><Eye className="size-5" /></Button>
+                                                                >
+                                                                    <FormControl>
+                                                                        <SelectTrigger className="w-full min-h-[40px] rounded">
+                                                                            <SelectValue placeholder="Select Store" />
+                                                                        </SelectTrigger>
+                                                                    </FormControl>
+                                                                    <SelectContent>
+                                                                        {
+                                                                            ["Available", "Order"].map((leadType) => (
+                                                                                <SelectItem key={leadType} value={leadType}>{leadType}</SelectItem>
+                                                                            ))
+                                                                        }
+                                                                    </SelectContent>
+                                                                </Select>
+                                                                <FormMessage />
+                                                            </FormItem>
+                                                        )}
+                                                    />
+                                                    <FormDatePicker
+                                                        name="deliveryDate"
+                                                        label="Delivery Date"
+                                                        description="Select a date"
+                                                        required
+                                                    />
+                                                    <div className="flex flex-col space-y-2">
+                                                        <FormLabel className="text-slate-700 font-medium">Specification</FormLabel>
+                                                        <div onClick={() => ViewSpecification(item.id)} className="px-2 py-2.5 border rounded text-[#0a0a0a] relative cursor-pointer">
+                                                            View All Specifications
+                                                            <Button variant={"default"} className="absolute cursor-pointer right-0 top-0 bottom-0 w-[41px] rounded-none h-[41px] border-0"><Eye className="size-5" /></Button>
+                                                        </div>
+                                                    </div>
+
                                                 </div>
-                                            </div>
+                                            </Card>
+                                        )
+                                    }
 
-                                        </div>
-                                    </Card>
+
                                 </CardDescription>
                             </Card>
 
@@ -763,6 +802,73 @@ export default function UpdateLeadPage() {
                     </form>
                 </Form>
             </Card>
+            <AlertDialog open={OpenSpecModel} onOpenChange={setOpenSpecModel}>
+                <AlertDialogContent style={{ maxWidth: "768px", width: "90%" }} className="max-w-none ml-auto mr-auto">
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Item #1</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            <div className="grid lg:grid-cols-4 md:grid-cols-1 grid-cols-1 gap-4 mt-4 mb-3">
+                                <div className="flex flex-col space-y-2">
+                                    <Label className="text-slate-700 font-medium">Item Name</Label>
+                                    <div className="px-3 py-2 border rounded">{selectedItem?.itemName}</div>
+                                </div>
+                                <div className="flex flex-col space-y-2">
+                                    <Label className="text-slate-700 font-medium">Quantity</Label>
+                                    <div className="px-3 py-2 border rounded">{selectedItem?.quantity}</div>
+                                </div>
+                                <div className="flex flex-col space-y-2">
+                                    <Label className="text-slate-700 font-medium">Urgency</Label>
+                                    <div className="px-3 py-2 border rounded">{selectedItem?.urgency}</div>
+                                </div>
+                                <div className="flex flex-col space-y-2">
+                                    <Label className="text-slate-700 font-medium">Budget</Label>
+                                    <div className="px-3 py-2 border rounded">{selectedItem?.budget?.estimatedCost}</div>
+                                </div>
+                            </div>
+                            <div className="flex flex-col space-y-2 mb-4">
+                                <Label className="text-slate-700 font-medium">Remark</Label>
+                                <div className="px-3 py-2 border rounded">{selectedItem?.remark}</div>
+                            </div>
+                            <CardTitle className="mb-3">Specifications</CardTitle>
+                            <Table className="border">
+                                {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead className="w-[100px]">Model Number</TableHead>
+                                        <TableHead>Capacity</TableHead>
+                                        <TableHead>Dimensions</TableHead>
+                                        <TableHead>Material</TableHead>
+                                        <TableHead>Voltage</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    <TableRow>
+                                        <TableCell>
+                                            {selectedItem?.specifications.modelNumber}
+                                        </TableCell>
+                                        <TableCell>
+                                            {selectedItem?.specifications.capacity}
+                                        </TableCell>
+                                        <TableCell>
+                                            {selectedItem?.specifications.dimensions}
+                                        </TableCell>
+                                        <TableCell>
+                                            {selectedItem?.specifications.material}
+                                        </TableCell>
+                                        <TableCell>
+                                            {selectedItem?.specifications.voltage}
+                                        </TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
+
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Close</AlertDialogCancel>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div >
     );
 }
