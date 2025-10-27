@@ -9,12 +9,22 @@ import { Badge } from '@/components/ui/badge';
 import type { PayrollRecord, AttendanceData } from '@/types/payroll';
 import { PDFService } from '@/lib/pdf-service';
 import { SalarySlipTemplate } from '@/components/salary-slip-template';
+
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover"
+import { ChevronDownIcon } from 'lucide-react';
+import { Separator } from './ui/separator';
 interface PayrollFormProps {
     onSubmit: (data: PayrollRecord) => void;
     attendanceData?: AttendanceData[];
 }
 
 export const PayrollForm: React.FC<PayrollFormProps> = ({ onSubmit, attendanceData = [] }) => {
+
+    const [open, setOpen] = React.useState(false)
     const [formData, setFormData] = useState<Partial<PayrollRecord>>({
         salaryMonth: new Date(),
         basic: 0,
@@ -123,9 +133,9 @@ export const PayrollForm: React.FC<PayrollFormProps> = ({ onSubmit, attendanceDa
             <CardHeader>
                 <CardTitle className="flex items-center justify-between">
                     <span>Payroll & Compliance</span>
-                    <Badge variant={formData.status === 'draft' ? 'secondary' : 'default'}>
+                    {/* <Badge variant={formData.status === 'draft' ? 'secondary' : 'default'}>
                         {formData.status?.toUpperCase()}
-                    </Badge>
+                    </Badge> */}
                 </CardTitle>
             </CardHeader>
             <CardContent>
@@ -160,20 +170,37 @@ export const PayrollForm: React.FC<PayrollFormProps> = ({ onSubmit, attendanceDa
                             </Button>
                         </div>
                     </div>
+                    <Separator />
 
                     {/* Salary Month */}
-                    <div className="space-y-2">
-                        <Label>Salary Month</Label>
-                        <Calendar
-                            mode="single"
-                            selected={formData.salaryMonth}
-                            onSelect={(date) => setFormData(prev => ({ ...prev, salaryMonth: date }))}
-                            className="rounded-md border"
-                        />
-                    </div>
 
                     {/* Earnings Section */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div className="space-y-2">
+                            <Label>Salary Month</Label>
+                            <Popover open={open} onOpenChange={setOpen}>
+                                <PopoverTrigger asChild>
+                                    <Button
+                                        variant="outline"
+                                        id="date"
+                                        className="w-full justify-between font-normal"
+                                    >
+                                        {formData.salaryMonth ? formData.salaryMonth.toLocaleDateString() : "Select date"}
+                                        <ChevronDownIcon />
+                                    </Button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+                                    <Calendar
+                                        mode="single"
+                                        selected={formData.salaryMonth}
+                                        captionLayout="dropdown"
+                                        onSelect={(date) => setFormData(prev => ({ ...prev, salaryMonth: date }))}
+                                        className="rounded-md border"
+                                    />
+                                </PopoverContent>
+                            </Popover>
+
+                        </div>
                         <div className="space-y-2">
                             <Label htmlFor="basic">Basic Salary</Label>
                             <Input
@@ -348,6 +375,7 @@ export const PayrollForm: React.FC<PayrollFormProps> = ({ onSubmit, attendanceDa
                             netPayable: formData.netPayable!,
                             paymentMode: formData.paymentMode!,
                             status: 'draft',
+                            date: new Date().toISOString().split('T')[0],
                             employeeId: selectedEmployee,
                             employeeName: attendanceData.find(emp => emp.employeeId === selectedEmployee)?.employeeName || ''
                         }}

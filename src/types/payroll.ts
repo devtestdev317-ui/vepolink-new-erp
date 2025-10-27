@@ -15,6 +15,7 @@ export interface PayrollRecord {
     status: 'draft' | 'pending' | 'approved' | 'paid';
     employeeId: string;
     employeeName: string;
+    date: string;
 }
 
 export interface AttendanceData {

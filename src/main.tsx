@@ -28,6 +28,7 @@ import VendorPage from './dashboard/vendor/add-vendor/page.tsx';
 import VendorListPage from './dashboard/vendor/page.tsx';
 import VendorDetail from './dashboard/vendor/view/page.tsx';
 import UpdateVendor from './dashboard/vendor/update/page.tsx';
+import PerformanceManagementPage from './dashboard/performance/page.tsx';
 const Routes = createBrowserRouter([
   {
     path: "/",
@@ -133,6 +134,10 @@ const Routes = createBrowserRouter([
       {
         path: 'vendor/update/:id',
         element: <UpdateVendor />
+      },
+      {
+        path: 'performance',
+        element: <PerformanceManagementPage />
       },
     ],
   },

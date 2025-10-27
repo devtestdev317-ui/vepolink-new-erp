@@ -1,4 +1,3 @@
-
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -141,10 +140,13 @@ export function EmployeeForm({ employee, onSubmit, onCancel }: EmployeeFormProps
                   />
                 </PopoverContent>
               </Popover>
+              {errors.dob && (
+                <p className="text-sm text-red-500">{errors.dob.message}</p>
+              )}
             </div>
             <div className='flex flex-col gap-y-2'>
               <Label htmlFor="gender">Gender</Label>
-              <Select  onValueChange={(value) => setValue('gender', value as any)} defaultValue={watch('gender')}>
+              <Select onValueChange={(value) => setValue('gender', value as any)} defaultValue={watch('gender')}>
                 <SelectTrigger className='w-full'>
                   <SelectValue placeholder="Select gender" />
                 </SelectTrigger>
@@ -154,6 +156,9 @@ export function EmployeeForm({ employee, onSubmit, onCancel }: EmployeeFormProps
                   <SelectItem value="other">Other</SelectItem>
                 </SelectContent>
               </Select>
+              {errors.gender && (
+                <p className="text-sm text-red-500">{errors.gender.message}</p>
+              )}
             </div>
           </div>
         </Card>
@@ -188,6 +193,97 @@ export function EmployeeForm({ employee, onSubmit, onCancel }: EmployeeFormProps
           </div>
         </Card>
 
+        {/* Address */}
+        <Card className="col-span-2 p-4 pb-6 gap-0 rounded ">
+          <h3 className="text-sm font-semibold mb-4">Address</h3>
+          <div className="grid grid-cols-2 gap-4">
+            <div className='flex flex-col gap-y-2'>
+              <Label htmlFor="street">Street</Label>
+              <Input
+                id="street"
+                {...register('address.street')}
+                placeholder="123 Main St"
+              />
+              {errors.address?.street && (
+                <p className="text-sm text-red-500">{errors.address.street.message}</p>
+              )}
+            </div>
+            <div className='flex flex-col gap-y-2'>
+              <Label htmlFor="city">City</Label>
+              <Input
+                id="city"
+                {...register('address.city')}
+                placeholder="Mumbai"
+              />
+              {errors.address?.city && (
+                <p className="text-sm text-red-500">{errors.address.city.message}</p>
+              )}
+            </div>
+            <div className='flex flex-col gap-y-2'>
+              <Label htmlFor="state">State</Label>
+              <Input
+                id="state"
+                {...register('address.state')}
+                placeholder="Maharashtra"
+              />
+              {errors.address?.state && (
+                <p className="text-sm text-red-500">{errors.address.state.message}</p>
+              )}
+            </div>
+            <div className='flex flex-col gap-y-2'>
+              <Label htmlFor="pincode">Pincode</Label>
+              <Input
+                id="pincode"
+                {...register('address.pincode')}
+                placeholder="400001"
+              />
+              {errors.address?.pincode && (
+                <p className="text-sm text-red-500">{errors.address.pincode.message}</p>
+              )}
+            </div>
+          </div>
+        </Card>
+
+        {/* Emergency Contact */}
+        <Card className="col-span-2 p-4 pb-6 gap-0 rounded ">
+          <h3 className="text-sm font-semibold mb-4">Emergency Contact</h3>
+          <div className="grid grid-cols-2 gap-4">
+            <div className='flex flex-col gap-y-2'>
+              <Label htmlFor="emergencyName">Name</Label>
+              <Input
+                id="emergencyName"
+                {...register('emergencyContact.name')}
+                placeholder="Jane Doe"
+              />
+              {errors.emergencyContact?.name && (
+                <p className="text-sm text-red-500">{errors.emergencyContact.name.message}</p>
+              )}
+            </div>
+            <div className='flex flex-col gap-y-2'>
+              <Label htmlFor="relationship">Relationship</Label>
+              <Input
+                id="relationship"
+                {...register('emergencyContact.relationship')}
+                placeholder="Spouse"
+              />
+              {errors.emergencyContact?.relationship && (
+                <p className="text-sm text-red-500">{errors.emergencyContact.relationship.message}</p>
+              )}
+            </div>
+            <div className='flex flex-col gap-y-2'>
+              <Label htmlFor="emergencyPhone">Phone</Label>
+              <Input
+                id="emergencyPhone"
+                {...register('emergencyContact.phone')}
+                placeholder="+91 9876543211"
+              />
+              {errors.emergencyContact?.phone && (
+                <p className="text-sm text-red-500">{errors.emergencyContact.phone.message}</p>
+              )}
+            </div>
+          </div>
+        </Card>
+
         {/* Employment Details */}
         <Card className="col-span-2 p-4 pb-6 gap-0 rounded ">
           <h3 className="text-sm font-semibold mb-4">Employment Details</h3>
@@ -215,6 +311,17 @@ export function EmployeeForm({ employee, onSubmit, onCancel }: EmployeeFormProps
               )}
             </div>
             <div className='flex flex-col gap-y-2'>
+              <Label htmlFor="reportingManager">Reporting Manager</Label>
+              <Input
+                id="reportingManager"
+                {...register('reportingManager')}
+                placeholder="Sarah Wilson"
+              />
+              {errors.reportingManager && (
+                <p className="text-sm text-red-500">{errors.reportingManager.message}</p>
+              )}
+            </div>
+            <div className='flex flex-col gap-y-2'>
               <Label htmlFor="employmentType">Employment Type</Label>
               <Select onValueChange={(value) => setValue('employmentType', value as any)} defaultValue={watch('employmentType')}>
                 <SelectTrigger className='w-full'>
@@ -225,6 +332,9 @@ export function EmployeeForm({ employee, onSubmit, onCancel }: EmployeeFormProps
                   <SelectItem value="contract">Contract</SelectItem>
                 </SelectContent>
               </Select>
+              {errors.employmentType && (
+                <p className="text-sm text-red-500">{errors.employmentType.message}</p>
+              )}
             </div>
             <div className='flex flex-col gap-y-2'>
               <Label>Date of Joining</Label>
@@ -250,13 +360,56 @@ export function EmployeeForm({ employee, onSubmit, onCancel }: EmployeeFormProps
                   />
                 </PopoverContent>
               </Popover>
+              {errors.dateOfJoining && (
+                <p className="text-sm text-red-500">{errors.dateOfJoining.message}</p>
+              )}
             </div>
           </div>
         </Card>
 
-        {/* Bank & Statutory Details */}
+        {/* Bank Details */}
         <Card className="col-span-2 p-4 pb-6 gap-0 rounded ">
-          <h3 className="text-sm font-semibold mb-4">Bank & Statutory Details</h3>
+          <h3 className="text-sm font-semibold mb-4">Bank Details</h3>
+          <div className="grid grid-cols-2 gap-4">
+            <div className='flex flex-col gap-y-2'>
+              <Label htmlFor="accountNumber">Account Number</Label>
+              <Input
+                id="accountNumber"
+                {...register('bankDetails.accountNumber')}
+                placeholder="1234567890"
+              />
+              {errors.bankDetails?.accountNumber && (
+                <p className="text-sm text-red-500">{errors.bankDetails.accountNumber.message}</p>
+              )}
+            </div>
+            <div className='flex flex-col gap-y-2'>
+              <Label htmlFor="bankName">Bank Name</Label>
+              <Input
+                id="bankName"
+                {...register('bankDetails.bankName')}
+                placeholder="HDFC Bank"
+              />
+              {errors.bankDetails?.bankName && (
+                <p className="text-sm text-red-500">{errors.bankDetails.bankName.message}</p>
+              )}
+            </div>
+            <div className='flex flex-col gap-y-2'>
+              <Label htmlFor="ifscCode">IFSC Code</Label>
+              <Input
+                id="ifscCode"
+                {...register('bankDetails.ifscCode')}
+                placeholder="HDFC0001234"
+              />
+              {errors.bankDetails?.ifscCode && (
+                <p className="text-sm text-red-500">{errors.bankDetails.ifscCode.message}</p>
+              )}
+            </div>
+          </div>
+        </Card>
+
+        {/* Statutory Details */}
+        <Card className="col-span-2 p-4 pb-6 gap-0 rounded ">
+          <h3 className="text-sm font-semibold mb-4">Statutory Details</h3>
           <div className="grid grid-cols-2 gap-4">
             <div className='flex flex-col gap-y-2'>
               <Label htmlFor="pan">PAN</Label>

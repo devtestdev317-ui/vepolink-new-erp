@@ -44,7 +44,8 @@ const mockPayrolls: PayrollRecord[] = [
         paymentMode: 'bank',
         status: 'paid',
         employeeId: 'emp1',
-        employeeName: 'John Doe'
+        employeeName: 'John Doe',
+        date: '2024-01-31'
     }
 ];
 

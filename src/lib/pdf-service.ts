@@ -1,6 +1,7 @@
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import type { PayrollRecord } from '@/types/payroll';
+import type { PerformanceReview } from '@/types/performance';
 
 export class PDFService {
     static async generateSalarySlip(payroll: PayrollRecord, element?: HTMLElement): Promise<void> {
@@ -265,5 +266,396 @@ export class PDFService {
         pdf.text(`Total TDS Deducted: ${this.formatCurrency(totalTDS)}`, 20, yPosition);
 
         pdf.save(`tds-challan-${new Date().getTime()}.pdf`);
+    }
+    
+
+    static async generatePerformanceReport(review: PerformanceReview): Promise<void> {
+        const pdf = new jsPDF('portrait', 'mm', 'a4');
+
+        let yPosition = 20;
+
+        // Add Header
+        await this.addPerformanceReportHeader(pdf, review, yPosition);
+        yPosition = 45;
+
+        // Add Employee & Review Details
+        yPosition = this.addEmployeeDetails(pdf, review, yPosition);
+        yPosition += 10;
+
+        // Add Executive Summary
+        yPosition = this.addExecutiveSummary(pdf, review, yPosition);
+        yPosition += 10;
+
+        // Add KRA/KPI Performance
+        yPosition = this.addKRAPerformance(pdf, review, yPosition);
+
+        // Check for page break
+        if (yPosition > 200) {
+            pdf.addPage();
+            yPosition = 20;
+        }
+
+        // Add Ratings Breakdown
+        yPosition = this.addRatingsBreakdown(pdf, review, yPosition);
+        yPosition += 10;
+
+        // Add Feedback Section
+        yPosition = this.addFeedbackSection(pdf, review, yPosition);
+
+        // Check for page break
+        if (yPosition > 200) {
+            pdf.addPage();
+            yPosition = 20;
+        }
+
+        // Add Final Assessment
+        yPosition = this.addFinalAssessment(pdf, review, yPosition);
+        yPosition += 10;
+
+        // Add Recommendations & Goals
+        this.addRecommendationsAndGoals(pdf, review, yPosition);
+
+        // Add Footer
+        this.addPerformanceReportFooter(pdf);
+
+        // Generate filename and save
+        const fileName = `performance-review-${review.employeeName}-${this.formatDateForFilename(review.reviewPeriod.end)}.pdf`;
+        pdf.save(fileName);
+    }
+
+    private static async addPerformanceReportHeader(pdf: jsPDF, review: PerformanceReview, yPosition: number): Promise<void> {
+
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        // Company Logo and Header
+        pdf.setFillColor(44, 62, 80);
+        pdf.rect(0, 0, pageWidth, 40, 'F');
+
+        pdf.setTextColor(255, 255, 255);
+        pdf.setFontSize(20);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('PERFORMANCE REVIEW REPORT', pageWidth / 2, 15, { align: 'center' });
+
+        pdf.setFontSize(12);
+        pdf.setFont('helvetica', 'normal');
+        pdf.text('Comprehensive Performance Assessment', pageWidth / 2, 22, { align: 'center' });
+
+        // Review Period
+        const periodText = `Review Period: ${this.formatDate(review.reviewPeriod.start)} - ${this.formatDate(review.reviewPeriod.end)}`;
+        pdf.text(periodText, pageWidth / 2, 30, { align: 'center' });
+
+        pdf.setTextColor(0, 0, 0); // Reset text color
+    }
+
+    private static addEmployeeDetails(pdf: jsPDF, review: PerformanceReview, yPosition: number): number {
+        pdf.setFontSize(14);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('EMPLOYEE DETAILS', 20, yPosition);
+
+        yPosition += 8;
+        pdf.setFontSize(10);
+        pdf.setFont('helvetica', 'normal');
+
+        pdf.text(`Employee Name: ${review.employeeName}`, 20, yPosition);
+        pdf.text(`Employee ID: ${review.employeeId}`, 120, yPosition);
+
+        yPosition += 6;
+        pdf.text(`Review Date: ${this.formatDate(new Date())}`, 20, yPosition);
+        pdf.text(`Final Rating: ${review.finalAppraisalResult.finalRating}/5.0`, 120, yPosition);
+
+        yPosition += 6;
+        const performanceLevel = review.finalAppraisalResult.performanceLevel.toUpperCase();
+        pdf.text(`Performance Level: ${performanceLevel}`, 20, yPosition);
+
+        yPosition += 6;
+        if (review.promotionDetails) {
+            pdf.text(`Increment: ${review.promotionDetails.incrementPercentage}%`, 20, yPosition);
+            if (review.promotionDetails.promotedTo) {
+                pdf.text(`Promotion: ${review.promotionDetails.promotedTo}`, 120, yPosition);
+            }
+        }
+
+        return yPosition;
+    }
+
+    private static addExecutiveSummary(pdf: jsPDF, review: PerformanceReview, yPosition: number): number {
+        pdf.setFontSize(14);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('EXECUTIVE SUMMARY', 20, yPosition);
+
+        yPosition += 8;
+        pdf.setFontSize(10);
+        pdf.setFont('helvetica', 'normal');
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        // Performance Summary
+        const summary = review.finalAppraisalResult.summary || 'No summary provided.';
+        const splitSummary = pdf.splitTextToSize(summary, pageWidth - 40);
+        pdf.text(splitSummary, 20, yPosition);
+        yPosition += splitSummary.length * 5 + 5;
+
+        // Overall Rating Box
+        pdf.setFillColor(240, 240, 240);
+        pdf.rect(20, yPosition, pageWidth - 40, 20, 'F');
+
+        pdf.setFontSize(12);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('Overall Performance Rating:', 25, yPosition + 8);
+        pdf.setTextColor(44, 62, 80);
+        pdf.text(`${review.finalAppraisalResult.finalRating}/5.0`, 180, yPosition + 8, { align: 'right' });
+        pdf.setTextColor(0, 0, 0);
+
+        return yPosition + 25;
+    }
+
+    private static addKRAPerformance(pdf: jsPDF, review: PerformanceReview, yPosition: number): number {
+        pdf.setFontSize(14);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('KEY RESULT AREAS & PERFORMANCE', 20, yPosition);
+
+        yPosition += 8;
+
+        if (!review.kraKpi || review.kraKpi.length === 0) {
+            pdf.setFontSize(10);
+            pdf.setFont('helvetica', 'italic');
+            pdf.text('No KRA/KPI data available.', 20, yPosition);
+            return yPosition + 5;
+        }
+
+        review.kraKpi.forEach((kra, index) => {
+            // Check for page break
+            if (yPosition > 250) {
+                pdf.addPage();
+                yPosition = 20;
+            }
+
+            pdf.setFontSize(11);
+            pdf.setFont('helvetica', 'bold');
+            pdf.text(`${index + 1}. ${kra.category}: ${kra.objective}`, 20, yPosition);
+
+            yPosition += 6;
+            pdf.setFontSize(9);
+            pdf.setFont('helvetica', 'normal');
+
+            pdf.text(`KPI: ${kra.kpi}`, 25, yPosition);
+            pdf.text(`Target: ${kra.target}`, 120, yPosition);
+
+            yPosition += 5;
+            pdf.text(`Achievement: ${kra.actualAchievement}`, 25, yPosition);
+            pdf.text(`Weightage: ${kra.weightage}%`, 120, yPosition);
+
+            yPosition += 5;
+            pdf.text(`Score: ${kra.score}/5.0`, 25, yPosition);
+
+            // Progress bar visualization
+            const scoreWidth = (kra.score / 5) * 50;
+            pdf.setFillColor(44, 62, 80);
+            pdf.rect(60, yPosition - 2, scoreWidth, 3, 'F');
+            pdf.setDrawColor(200, 200, 200);
+            pdf.rect(60, yPosition - 2, 50, 3, 'S');
+
+            yPosition += 10;
+        });
+
+        return yPosition;
+    }
+
+    private static addRatingsBreakdown(pdf: jsPDF, review: PerformanceReview, yPosition: number): number {
+        pdf.setFontSize(14);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('DETAILED RATINGS BREAKDOWN', 20, yPosition);
+
+        yPosition += 8;
+        pdf.setFontSize(9);
+        pdf.setFont('helvetica', 'normal');
+
+        const ratings = review.ratings;
+        const ratingCategories = [
+            { label: 'Quality of Work', value: ratings.qualityOfWork },
+            { label: 'Productivity', value: ratings.productivity },
+            { label: 'Technical Skills', value: ratings.technicalSkills },
+            { label: 'Communication', value: ratings.communication },
+            { label: 'Teamwork', value: ratings.teamwork },
+            { label: 'Initiative', value: ratings.initiative },
+            { label: 'Adaptability', value: ratings.adaptability }
+        ];
+
+        ratingCategories.forEach((category, index) => {
+            if (yPosition > 270) {
+                pdf.addPage();
+                yPosition = 20;
+            }
+
+            const x = index % 2 === 0 ? 20 : 110;
+            if (index % 2 === 0 && index !== 0) {
+                yPosition += 25;
+            }
+
+            pdf.text(category.label, x, yPosition);
+            pdf.text(`${category.value}/5.0`, x + 70, yPosition, { align: 'right' });
+
+            // Rating visualization
+            const ratingWidth = (category.value / 5) * 40;
+            pdf.setFillColor(44, 62, 80);
+            pdf.rect(x, yPosition + 2, ratingWidth, 3, 'F');
+            pdf.setDrawColor(200, 200, 200);
+            pdf.rect(x, yPosition + 2, 40, 3, 'S');
+        });
+
+        return yPosition + 35;
+    }
+
+    private static addFeedbackSection(pdf: jsPDF, review: PerformanceReview, yPosition: number): number {
+        pdf.setFontSize(14);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('FEEDBACK & COMMENTS', 20, yPosition);
+
+        yPosition += 8;
+
+        // Manager Feedback
+        pdf.setFontSize(11);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text("Manager's Feedback:", 20, yPosition);
+
+        yPosition += 6;
+        pdf.setFontSize(9);
+        pdf.setFont('helvetica', 'normal');
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const managerFeedback = review.managerFeedback || 'No manager feedback provided.';
+        const splitManagerFeedback = pdf.splitTextToSize(managerFeedback, pageWidth - 40);
+        pdf.text(splitManagerFeedback, 25, yPosition);
+        yPosition += splitManagerFeedback.length * 4 + 10;
+
+        // Employee Self-Review
+        if (review.employeeSelfReview) {
+            if (yPosition > 250) {
+                pdf.addPage();
+                yPosition = 20;
+            }
+
+            pdf.setFontSize(11);
+            pdf.setFont('helvetica', 'bold');
+            pdf.text("Employee's Self-Review:", 20, yPosition);
+
+            yPosition += 6;
+            pdf.setFontSize(9);
+            pdf.setFont('helvetica', 'normal');
+            const splitSelfReview = pdf.splitTextToSize(review.employeeSelfReview, pageWidth - 40);
+            pdf.text(splitSelfReview, 25, yPosition);
+            yPosition += splitSelfReview.length * 4 + 10;
+        }
+
+        return yPosition;
+    }
+
+    private static addFinalAssessment(pdf: jsPDF, review: PerformanceReview, yPosition: number): number {
+        pdf.setFontSize(14);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('FINAL ASSESSMENT', 20, yPosition);
+
+        yPosition += 8;
+
+        const assessment = review.finalAppraisalResult;
+
+        // Performance Level with color coding
+        pdf.setFontSize(11);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('Performance Level:', 20, yPosition);
+
+        let levelColor = [0, 0, 0];
+        switch (assessment.performanceLevel) {
+            case 'exceeds': levelColor = [0, 128, 0]; break; // Green
+            case 'meets': levelColor = [0, 0, 255]; break;   // Blue
+            case 'needs-improvement': levelColor = [255, 165, 0]; break; // Orange
+            case 'poor': levelColor = [255, 0, 0]; break;    // Red
+        }
+
+        pdf.setTextColor(levelColor[0], levelColor[1], levelColor[2]);
+        pdf.text(assessment.performanceLevel.toUpperCase().replace('-', ' '), 60, yPosition);
+        pdf.setTextColor(0, 0, 0);
+
+        yPosition += 8;
+
+        // Final Rating
+        pdf.text('Final Rating:', 20, yPosition);
+        pdf.setTextColor(44, 62, 80);
+        pdf.text(`${assessment.finalRating}/5.0`, 60, yPosition);
+        pdf.setTextColor(0, 0, 0);
+
+        return yPosition + 15;
+    }
+
+    private static addRecommendationsAndGoals(pdf: jsPDF, review: PerformanceReview, yPosition: number): void {
+        const assessment = review.finalAppraisalResult;
+
+        // Recommendations
+        if (assessment.recommendations && assessment.recommendations.length > 0) {
+            if (yPosition > 220) {
+                pdf.addPage();
+                yPosition = 20;
+            }
+
+            pdf.setFontSize(12);
+            pdf.setFont('helvetica', 'bold');
+            pdf.text('RECOMMENDATIONS FOR DEVELOPMENT', 20, yPosition);
+
+            yPosition += 8;
+            pdf.setFontSize(9);
+            pdf.setFont('helvetica', 'normal');
+
+            assessment.recommendations.forEach((rec, index) => {
+                if (yPosition > 270) {
+                    pdf.addPage();
+                    yPosition = 20;
+                }
+                pdf.text(`• ${rec}`, 25, yPosition);
+                yPosition += 5;
+            });
+        }
+
+        yPosition += 5;
+
+        // Next Period Goals
+        if (assessment.nextPeriodGoals && assessment.nextPeriodGoals.length > 0) {
+            if (yPosition > 250) {
+                pdf.addPage();
+                yPosition = 20;
+            }
+
+            pdf.setFontSize(12);
+            pdf.setFont('helvetica', 'bold');
+            pdf.text('GOALS FOR NEXT REVIEW PERIOD', 20, yPosition);
+
+            yPosition += 8;
+            pdf.setFontSize(9);
+            pdf.setFont('helvetica', 'normal');
+
+            assessment.nextPeriodGoals.forEach((goal, index) => {
+                if (yPosition > 270) {
+                    pdf.addPage();
+                    yPosition = 20;
+                }
+                pdf.text(`• ${goal}`, 25, yPosition);
+                yPosition += 5;
+            });
+        }
+    }
+
+    private static addPerformanceReportFooter(pdf: jsPDF): void {
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        pdf.setFontSize(8);
+        pdf.setTextColor(128, 128, 128);
+        pdf.text('Confidential Performance Document - For authorized use only', pageWidth / 2, 285, { align: 'center' });
+        pdf.text(`Generated on: ${new Date().toLocaleDateString('en-IN')}`, pageWidth / 2, 290, { align: 'center' });
+    }
+
+    private static formatDate(date: Date): string {
+        return date.toLocaleDateString('en-IN', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric'
+        });
+    }
+
+    private static formatDateForFilename(date: Date): string {
+        return date.toISOString().split('T')[0]; // YYYY-MM-DD format
     }
 }

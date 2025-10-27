@@ -92,6 +92,7 @@ export default function EmployeeManagementPage() {
         const newEmployee: Employee = {
             ...data,
             id: Date.now().toString(),
+            employeeId: `EMP${String(employees.length + 1).padStart(3, '0')}`, // Generate employee ID
             documents: [],
             assets: [],
         };
