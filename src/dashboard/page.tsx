@@ -77,7 +77,7 @@ export default function DashboardPage() {
                         className="ml-0" />
                 },
                 {
-                    id: '4',
+                    id: '5',
                     title: 'Recived Approvel',
                     href: '/dashboard/leads/approvel/list/',
                     icon: <Eye size={"18px"}
@@ -106,7 +106,7 @@ export default function DashboardPage() {
                         className="ml-0" />
                 },
                 {
-                    id: '4',
+                    id: '5',
                     title: 'Recived Approvel',
                     href: '/dashboard/leads/approvel/list/',
                     icon: <Eye size={"18px"}
@@ -201,7 +201,7 @@ export default function DashboardPage() {
                     id: "1", title: "Add new Vendor", href: "vendor/add-new", icon: <Eye size={"18px"} className="ml-0" />
                 },
                 {
-                    id: "1", title: "List of Vendor", href: "vendor/list", icon: <Eye size={"18px"} className="ml-0" />
+                    id: "2", title: "List of Vendor", href: "vendor/list", icon: <Eye size={"18px"} className="ml-0" />
                 }
             ]
         },
