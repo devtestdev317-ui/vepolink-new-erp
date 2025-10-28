@@ -16,14 +16,18 @@ import {
 } from "@/components/ui/popover"
 import { ChevronDownIcon } from 'lucide-react';
 import { Separator } from './ui/separator';
+import { toast } from 'sonner';
 interface PayrollFormProps {
     onSubmit: (data: PayrollRecord) => void;
     attendanceData?: AttendanceData[];
+    editingPayroll?: PayrollRecord | null;
 }
 
-export const PayrollForm: React.FC<PayrollFormProps> = ({ onSubmit, attendanceData = [] }) => {
+export const PayrollForm: React.FC<PayrollFormProps> = ({ onSubmit,
+    attendanceData = [],
+    editingPayroll = null }) => {
 
-    const [open, setOpen] = React.useState(false)
+    const [open, setOpen] = React.useState(false);
     const [formData, setFormData] = useState<Partial<PayrollRecord>>({
         salaryMonth: new Date(),
         basic: 0,
@@ -41,8 +45,58 @@ export const PayrollForm: React.FC<PayrollFormProps> = ({ onSubmit, attendanceDa
     });
 
     const salarySlipRef = useRef<HTMLDivElement>(null);
-
     const [selectedEmployee, setSelectedEmployee] = useState<string>('');
+    const [isEditing, setIsEditing] = useState<boolean>(false);
+    useEffect(() => {
+        if (editingPayroll) {
+            setFormData({
+                employeeName: editingPayroll.employeeName,
+                employeeId: editingPayroll.employeeId,
+                salaryMonth: editingPayroll.salaryMonth,
+                basic: editingPayroll.basic,
+                hra: editingPayroll.hra,
+                allowances: editingPayroll.allowances,
+                deductions: editingPayroll.deductions,
+                pf: editingPayroll.pf,
+                esi: editingPayroll.esi,
+                tds: editingPayroll.tds,
+                bonus: editingPayroll.bonus,
+                reimbursements: editingPayroll.reimbursements,
+                netPayable: editingPayroll.netPayable,
+                paymentMode: editingPayroll.paymentMode,
+                status: editingPayroll.status
+            });
+            setSelectedEmployee(editingPayroll.employeeId);
+
+        }
+    }, [editingPayroll]);
+    // Also check localStorage for editing data
+    useEffect(() => {
+        const savedEditingPayroll = localStorage.getItem('editingPayroll');
+        if (savedEditingPayroll && !editingPayroll) {
+            const payrollData = JSON.parse(savedEditingPayroll);
+            setIsEditing(true);
+            setFormData({
+                employeeName: payrollData.employeeName,
+                employeeId: payrollData.employeeId,
+                salaryMonth: new Date(payrollData.salaryMonth),
+                basic: payrollData.basic,
+                hra: payrollData.hra,
+                allowances: payrollData.allowances,
+                deductions: payrollData.deductions,
+                pf: payrollData.pf,
+                esi: payrollData.esi,
+                tds: payrollData.tds,
+                bonus: payrollData.bonus,
+                reimbursements: payrollData.reimbursements,
+                netPayable: payrollData.netPayable,
+                paymentMode: payrollData.paymentMode,
+                status: payrollData.status
+            });
+            setSelectedEmployee(payrollData.employeeId);
+            // localStorage.removeItem('editingPayroll');
+        }
+    }, []);
 
     // Auto-calculate salary based on attendance
     const calculateSalaryFromAttendance = () => {
@@ -57,7 +111,7 @@ export const PayrollForm: React.FC<PayrollFormProps> = ({ onSubmit, attendanceDa
         const calculatedPF = calculatedBasic * 0.12; // 12% of basic
         const calculatedESI = calculatedBasic * 0.0075; // 0.75% of basic
 
-        const calculatedTDS = Math.max(0, (calculatedBasic + calculatedHRA - 50000) * 0.05); // Simplified TDS calculation
+        const calculatedTDS = Math.max(0, (calculatedBasic + calculatedHRA - 50000) * 0.05);
 
         const netPayable = calculatedBasic + calculatedHRA - calculatedPF - calculatedESI - calculatedTDS;
 
@@ -91,14 +145,12 @@ export const PayrollForm: React.FC<PayrollFormProps> = ({ onSubmit, attendanceDa
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (formData.netPayable && formData.salaryMonth) {
-            onSubmit({
-                id: `payroll-${Date.now()}`,
-                employeeId: selectedEmployee,
-                employeeName: attendanceData.find(emp => emp.employeeId === selectedEmployee)?.employeeName || '',
-                ...formData
-            } as PayrollRecord);
-        }
+        onSubmit({
+            id: `payroll-${Date.now()}`,
+            employeeId: selectedEmployee,
+            employeeName: attendanceData.find(emp => emp.employeeId === selectedEmployee)?.employeeName || '',
+            ...formData
+        } as PayrollRecord);
     };
     const handleGenerateSalarySlip = async () => {
         if (!formData.netPayable || !formData.salaryMonth) {
@@ -110,28 +162,32 @@ export const PayrollForm: React.FC<PayrollFormProps> = ({ onSubmit, attendanceDa
             id: `temp-${Date.now()}`,
             employeeId: selectedEmployee,
             employeeName: attendanceData.find(emp => emp.employeeId === selectedEmployee)?.employeeName || '',
-            status: 'draft',
+            status: 'approved',
             ...formData
         } as PayrollRecord;
 
         try {
             if (salarySlipRef.current) {
-                // Generate from HTML template
                 await PDFService.generateSalarySlip(payrollData, salarySlipRef.current);
             } else {
-                // Generate programmatically
                 await PDFService.generateSalarySlip(payrollData);
             }
         } catch (error) {
             console.error('Error generating PDF:', error);
-            alert('Error generating salary slip. Please try again.');
+            toast.error("Something went wrong", {
+                description: "Error generating salary slip. Please try again.",
+                action: {
+                    label: "Close",
+                    onClick: () => console.log("Close"),
+                },
+            });
         }
     };
     return (
         <Card>
             <CardHeader>
                 <CardTitle className="flex items-center justify-between">
-                    <span>Payroll & Compliance</span>
+                    <span>{isEditing ? 'Update' : ''} Payroll & Compliance</span>
                     {/* <Badge variant={formData.status === 'draft' ? 'secondary' : 'default'}>
                         {formData.status?.toUpperCase()}
                     </Badge> */}
@@ -139,7 +195,6 @@ export const PayrollForm: React.FC<PayrollFormProps> = ({ onSubmit, attendanceDa
             </CardHeader>
             <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* Employee Selection and Auto Calculation */}
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div className="space-y-2">
                             <Label htmlFor="employee">Select Employee</Label>
@@ -338,7 +393,7 @@ export const PayrollForm: React.FC<PayrollFormProps> = ({ onSubmit, attendanceDa
                     {/* Action Buttons */}
                     <div className="flex gap-4 pt-4">
                         <Button type="submit" className="flex-1">
-                            Save Payroll
+                            {isEditing ? 'Update' : 'Create'} Payroll
                         </Button>
                         <Button
                             type="button"
@@ -349,9 +404,9 @@ export const PayrollForm: React.FC<PayrollFormProps> = ({ onSubmit, attendanceDa
                         >
                             Generate Salary Slip
                         </Button>
-                        <Button type="button" variant="outline" className="flex-1">
+                        {/* <Button type="button" variant="outline" className="flex-1">
                             Generate Challan
-                        </Button>
+                        </Button> */}
                     </div>
                 </form>
             </CardContent>

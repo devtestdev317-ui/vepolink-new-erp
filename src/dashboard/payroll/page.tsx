@@ -6,8 +6,9 @@ import { PayrollList } from '@/components/payroll-list';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import type { PayrollRecord, AttendanceData } from '@/types/payroll';
-import { Plus, FileText, Download } from 'lucide-react';
-import { PDFService } from '@/lib/pdf-service';
+import { Plus, FileText} from 'lucide-react';
+import { PDFService } from '@/lib/pdf-service'
+import { toast } from 'sonner';
 
 // Mock data - replace with actual API calls
 const mockAttendanceData: AttendanceData[] = [
@@ -52,20 +53,66 @@ const mockPayrolls: PayrollRecord[] = [
 export default function PayrollPage() {
     const [payrolls, setPayrolls] = useState<PayrollRecord[]>(mockPayrolls);
     const [activeTab, setActiveTab] = useState('create');
-
+    const date = new Date();
+    const newDate = new Intl.DateTimeFormat("en-GB", {
+        dateStyle: "full",
+        timeStyle: "long",
+        timeZone: "Asia/Kolkata",
+    }).format(date)
     const handleSubmitPayroll = (data: PayrollRecord) => {
+        const savedEditingPayroll = localStorage.getItem('editingPayroll');
+        // Update existing payroll 
+        if (savedEditingPayroll) {
+            const editingPayroll = JSON.parse(savedEditingPayroll) as PayrollRecord;
+            setPayrolls(prev => prev.map(p => p.id === editingPayroll.id ? data : p));
+            localStorage.removeItem('editingPayroll');
+            setActiveTab('records');
+            toast.success("Payroll Updated Successfully", {
+                description: newDate.toString(),
+                action: {
+                    label: "Success",
+                    onClick: () => console.log("Success"),
+                },
+            })
+            return;
+        }
+        // Add new payroll
         setPayrolls(prev => [...prev, data]);
         setActiveTab('records');
+        toast.success("Payroll Added Successfully", {
+            description: newDate.toString(),
+            action: {
+                label: "Success",
+                onClick: () => console.log("Success"),
+            },
+        })
     };
 
     const handleEditPayroll = (payroll: PayrollRecord) => {
-        // Implement edit functionality
-        console.log('Edit payroll:', payroll);
+        localStorage.setItem('editingPayroll', JSON.stringify(payroll));
+        setActiveTab('create');
+        toast.success(`Editing payroll for ${payroll.employeeName}`, {
+            description: newDate.toString(),
+            action: {
+                label: "Success",
+                onClick: () => console.log("Success"),
+            },
+        });
     };
 
     const handleViewPayroll = (payroll: PayrollRecord) => {
-        // Implement view functionality
-        console.log('View payroll:', payroll);
+        try {
+            PDFService.generateSalarySlip(payroll);
+        } catch (error) {
+            console.error('Error viewing salary slip:', error);
+            toast.error("Something went wrong", {
+                description: "Error viewing salary slip. Please try again.",
+                action: {
+                    label: "Close",
+                    onClick: () => console.log("Close"),
+                },
+            });
+        }
     };
 
     const handleDownloadPayroll = (payroll: PayrollRecord) => {
@@ -78,7 +125,13 @@ export default function PayrollPage() {
             await PDFService.generatePFChallan(payrolls);
         } catch (error) {
             console.error('Error generating PF challan:', error);
-            alert('Error generating PF challan. Please try again.');
+            toast.error("Something went wrong", {
+                description: "Error generating PF challan. Please try again.",
+                action: {
+                    label: "Close",
+                    onClick: () => console.log("Close"),
+                },
+            });
         }
     };
 
@@ -87,7 +140,13 @@ export default function PayrollPage() {
             await PDFService.generateESIChallan(payrolls);
         } catch (error) {
             console.error('Error generating ESI challan:', error);
-            alert('Error generating ESI challan. Please try again.');
+            toast.error("Something went wrong", {
+                description: "Error generating ESI challan. Please try again.",
+                action: {
+                    label: "Close",
+                    onClick: () => console.log("Close"),
+                },
+            });
         }
     };
     const generateTDSChallan = async () => {
@@ -95,7 +154,13 @@ export default function PayrollPage() {
             await PDFService.generateTDSChallan(payrolls);
         } catch (error) {
             console.error('Error generating TDS challan:', error);
-            alert('Error generating TDS challan. Please try again.');
+            toast.error("Something went wrong", {
+                description: "Error generating TDS challan. Please try again.",
+                action: {
+                    label: "Close",
+                    onClick: () => console.log("Close"),
+                },
+            });
         }
     };
     return (
@@ -134,10 +199,10 @@ export default function PayrollPage() {
                             <FileText className="h-4 w-4" />
                             Payroll Records
                         </TabsTrigger>
-                        <TabsTrigger value="settlement" className="flex items-center gap-2">
+                        {/* <TabsTrigger value="settlement" className="flex items-center gap-2">
                             <Download className="h-4 w-4" />
                             Full & Final
-                        </TabsTrigger>
+                        </TabsTrigger> */}
                     </TabsList>
 
                     <TabsContent value="create">
@@ -156,7 +221,7 @@ export default function PayrollPage() {
                         />
                     </TabsContent>
 
-                    <TabsContent value="settlement">
+                    {/* <TabsContent value="settlement">
                         <div className="text-center py-12">
                             <h3 className="text-xl font-semibold mb-4">Full & Final Settlement</h3>
                             <p className="text-muted-foreground mb-6">
@@ -164,7 +229,7 @@ export default function PayrollPage() {
                             </p>
                             <Button>Start Settlement Process</Button>
                         </div>
-                    </TabsContent>
+                    </TabsContent> */}
                 </Tabs>
             </div>
 

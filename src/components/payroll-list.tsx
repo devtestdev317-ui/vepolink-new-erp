@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import type { PayrollRecord } from '@/types/payroll';
 import { Download, Eye, Edit } from 'lucide-react';
 import { PDFService } from '@/lib/pdf-service';
+import { toast } from 'sonner';
 
 interface PayrollListProps {
     payrolls: PayrollRecord[];
@@ -13,7 +14,10 @@ interface PayrollListProps {
     onDownload: (payroll: PayrollRecord) => void;
 }
 
-export const PayrollList: React.FC<PayrollListProps> = ({ payrolls, onEdit, onView }) => {
+export const PayrollList: React.FC<PayrollListProps> = ({ payrolls,
+    onEdit,
+    onView,
+    onDownload }) => {
     const getStatusVariant = (status: PayrollRecord['status']) => {
         switch (status) {
             case 'approved': return 'default';
@@ -25,10 +29,24 @@ export const PayrollList: React.FC<PayrollListProps> = ({ payrolls, onEdit, onVi
     const handleDownloadSalarySlip = async (payroll: PayrollRecord) => {
         try {
             await PDFService.generateSalarySlip(payroll);
+            onDownload?.(payroll);
         } catch (error) {
             console.error('Error generating salary slip:', error);
-            alert('Error generating salary slip. Please try again.');
+            toast.error("Something went wrong", {
+                description: "Error generating salary slip. Please try again.",
+                action: {
+                    label: "Close",
+                    onClick: () => console.log("Close"),
+                },
+            });
         }
+    };
+    const handleViewPayroll = (payroll: PayrollRecord) => {
+        onView(payroll);
+    };
+
+    const handleEditPayroll = (payroll: PayrollRecord) => {
+        onEdit(payroll);
     };
     return (
         <div className="space-y-4">
@@ -67,13 +85,25 @@ export const PayrollList: React.FC<PayrollListProps> = ({ payrolls, onEdit, onVi
                             </TableCell>
                             <TableCell>
                                 <div className="flex gap-2">
-                                    <Button variant="outline" size="sm" onClick={() => onView(payroll)}>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => handleViewPayroll(payroll)}
+                                    >
                                         <Eye className="h-4 w-4" />
                                     </Button>
-                                    <Button variant="outline" size="sm" onClick={() => onEdit(payroll)}>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => handleEditPayroll(payroll)}
+                                    >
                                         <Edit className="h-4 w-4" />
                                     </Button>
-                                    <Button variant="outline" size="sm" onClick={() => handleDownloadSalarySlip(payroll)}>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => handleDownloadSalarySlip(payroll)}
+                                    >
                                         <Download className="h-4 w-4" />
                                     </Button>
                                 </div>

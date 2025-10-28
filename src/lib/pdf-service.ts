@@ -54,7 +54,8 @@ export class PDFService {
         pdf.setFontSize(20);
         pdf.setFont('helvetica', 'bold');
         pdf.setTextColor(44, 62, 80);
-        pdf.text('COMPANY NAME', 105, 20, { align: 'center' });
+        pdf.addImage('/assets/images/login.jpg', 'jpg', 15, 0, 180, 35);
+        pdf.text('Vepolink', 105, 20, { align: 'center' });
 
         pdf.setFontSize(12);
         pdf.setFont('helvetica', 'normal');
@@ -162,7 +163,7 @@ export class PDFService {
     }
 
     private static formatCurrency(amount: number): string {
-        return `₹${amount.toLocaleString('en-IN')}`;
+        return `${amount.toLocaleString('en-IN')}`;
     }
 
     static async generatePFChallan(payrolls: PayrollRecord[]): Promise<void> {
@@ -267,7 +268,7 @@ export class PDFService {
 
         pdf.save(`tds-challan-${new Date().getTime()}.pdf`);
     }
-    
+
 
     static async generatePerformanceReport(review: PerformanceReview): Promise<void> {
         const pdf = new jsPDF('portrait', 'mm', 'a4');
