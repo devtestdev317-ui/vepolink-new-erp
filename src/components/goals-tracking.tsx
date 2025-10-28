@@ -11,8 +11,9 @@ import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { CalendarIcon, Plus, Trash2, Target } from 'lucide-react';
 import { format } from 'date-fns';
-import type{ Goal } from '@/types/performance';
+import type { Goal } from '@/types/performance';
 import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 interface GoalsTrackingProps {
   employeeId?: string;
@@ -58,6 +59,22 @@ export const GoalsTracking: React.FC<GoalsTrackingProps> = ({
         status: 'not-started',
         weightage: 0
       });
+      toast.success("Goal added successfully", {
+        description: new Date().toString(),
+        action: {
+          label: "Success",
+          onClick: () => console.log("Success"),
+        },
+      })
+    }
+    else {
+      toast.error("Complete the form", {
+        description: "Please complete the Goals Tracking before adding a new goal",
+        action: {
+          label: "Close",
+          onClick: () => console.log("Close"),
+        },
+      })
     }
   };
 
@@ -65,10 +82,10 @@ export const GoalsTracking: React.FC<GoalsTrackingProps> = ({
     const updatedGoals = goals.map(goal =>
       goal.id === goalId
         ? {
-            ...goal,
-            progress: Math.min(100, Math.max(0, progress)),
-            status: (progress >= 100 ? 'completed' : progress > 0 ? 'in-progress' : 'not-started') as Goal['status']
-          }
+          ...goal,
+          progress: Math.min(100, Math.max(0, progress)),
+          status: (progress >= 100 ? 'completed' : progress > 0 ? 'in-progress' : 'not-started') as Goal['status']
+        }
         : goal
     );
     onGoalsUpdate(updatedGoals);
@@ -76,6 +93,13 @@ export const GoalsTracking: React.FC<GoalsTrackingProps> = ({
 
   const deleteGoal = (goalId: string) => {
     onGoalsUpdate(goals.filter(goal => goal.id !== goalId));
+    toast.error("Complete the form", {
+      description: "Please complete the Goals Tracking before adding a new goal",
+      action: {
+        label: "Close",
+        onClick: () => console.log("Close"),
+      },
+    })
   };
 
   const getStatusVariant = (status: Goal['status']) => {
@@ -111,11 +135,11 @@ export const GoalsTracking: React.FC<GoalsTrackingProps> = ({
               </div>
               <div className="space-y-2">
                 <Label htmlFor="category">Category</Label>
-                <Select 
-                  value={newGoal.category} 
+                <Select
+                  value={newGoal.category}
                   onValueChange={(value) => setNewGoal(prev => ({ ...prev, category: value }))}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className='w-full'>
                     <SelectValue placeholder="Select category" />
                   </SelectTrigger>
                   <SelectContent>
@@ -198,7 +222,7 @@ export const GoalsTracking: React.FC<GoalsTrackingProps> = ({
               </div>
             </div>
 
-            <Button type="button" onClick={addGoal} className="mt-4" variant="outline">
+            <Button type="button" onClick={addGoal} className="mt-4" variant="default">
               <Plus className="h-4 w-4 mr-2" />
               Add Goal
             </Button>

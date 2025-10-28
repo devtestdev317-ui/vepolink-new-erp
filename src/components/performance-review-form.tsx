@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 // import { Badge } from '@/components/ui/badge';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { CalendarIcon, Plus, Trash2 } from 'lucide-react';
+import { Calculator, CalendarIcon, Plus, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
 import type { PerformanceReview, KRAKPI, Ratings, AppraisalResult } from '@/types/performance';
 import { cn } from '@/lib/utils';
@@ -78,6 +78,22 @@ export const PerformanceReviewForm: React.FC<PerformanceReviewFormProps> = ({
                 actualAchievement: '',
                 score: 0
             });
+            toast.success("KRA added successfully", {
+                description: new Date().toString(),
+                action: {
+                    label: "Success",
+                    onClick: () => console.log("Success"),
+                },
+            })
+        }
+        else {
+            toast.error("Please fill in all required fields", {
+                description: "Category, Objective, and KPI are required.",
+                action: {
+                    label: "Undo",
+                    onClick: () => console.log("Undo"),
+                },
+            })
         }
     };
 
@@ -86,6 +102,13 @@ export const PerformanceReviewForm: React.FC<PerformanceReviewFormProps> = ({
             ...prev,
             kraKpi: prev.kraKpi?.filter(kra => kra.id !== id)
         }));
+        toast.success("KRA removed successfully", {
+            description: new Date().toString(),
+            action: {
+                label: "Success",
+                onClick: () => console.log("Success"),
+            },
+        })
     };
 
     const handleRatingChange = (field: keyof Ratings, value: number) => {
@@ -127,6 +150,15 @@ export const PerformanceReviewForm: React.FC<PerformanceReviewFormProps> = ({
                 ...formData
             } as PerformanceReview;
             onSubmit(review);
+        }
+        else {
+            toast.error("complete then form", {
+                description: "Please complete the performance review before generating report",
+                action: {
+                    label: "Close",
+                    onClick: () => console.log("Close"),
+                },
+            })
         }
     };
     const handleGenerateReport = async () => {
@@ -186,7 +218,7 @@ export const PerformanceReviewForm: React.FC<PerformanceReviewFormProps> = ({
             <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-6">
                     {/* Basic Information */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div className="space-y-2">
                             <Label htmlFor="employeeId">Employee</Label>
                             <Select
@@ -207,69 +239,74 @@ export const PerformanceReviewForm: React.FC<PerformanceReviewFormProps> = ({
                         </div>
 
                         <div className="space-y-2">
-                            <Label>Review Period</Label>
-                            <div className="grid grid-cols-2 gap-2">
-                                <Popover>
-                                    <PopoverTrigger asChild>
-                                        <Button
-                                            variant="outline"
-                                            className={cn(
-                                                "w-full justify-start text-left font-normal",
-                                                !formData.reviewPeriod?.start && "text-muted-foreground"
-                                            )}
-                                        >
-                                            <CalendarIcon className="mr-2 h-4 w-4" />
-                                            {formData.reviewPeriod?.start ? (
-                                                format(formData.reviewPeriod.start, "PPP")
-                                            ) : (
-                                                <span>Start date</span>
-                                            )}
-                                        </Button>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="w-auto p-0">
-                                        <Calendar
-                                            mode="single"
-                                            selected={formData.reviewPeriod?.start}
-                                            captionLayout="dropdown"
-                                            onSelect={(date) => setFormData(prev => ({
-                                                ...prev,
-                                                reviewPeriod: { ...prev.reviewPeriod!, start: date! }
-                                            }))}
-                                            initialFocus
-                                        />
-                                    </PopoverContent>
-                                </Popover>
-
-                                <Popover>
-                                    <PopoverTrigger asChild>
-                                        <Button
-                                            variant="outline"
-                                            className={cn(
-                                                "w-full justify-start text-left font-normal",
-                                                !formData.reviewPeriod?.end && "text-muted-foreground"
-                                            )}
-                                        >
-                                            <CalendarIcon className="mr-2 h-4 w-4" />
-                                            {formData.reviewPeriod?.end ? (
-                                                format(formData.reviewPeriod.end, "PPP")
-                                            ) : (
-                                                <span>End date</span>
-                                            )}
-                                        </Button>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="w-auto p-0">
-                                        <Calendar
-                                            mode="single"
-                                            selected={formData.reviewPeriod?.end} captionLayout="dropdown"
-                                            onSelect={(date) => setFormData(prev => ({
-                                                ...prev,
-                                                reviewPeriod: { ...prev.reviewPeriod!, end: date! }
-                                            }))}
-                                            initialFocus
-                                        />
-                                    </PopoverContent>
-                                </Popover>
-                            </div>
+                            <Label>Review Period From Date</Label>
+                            <Popover>
+                                <PopoverTrigger asChild>
+                                    <Button
+                                        variant="outline"
+                                        className={cn(
+                                            "w-full justify-start text-left font-normal",
+                                            !formData.reviewPeriod?.start && "text-muted-foreground"
+                                        )}
+                                    >
+                                        <CalendarIcon className="mr-2 h-4 w-4" />
+                                        {formData.reviewPeriod?.start ? (
+                                            format(formData.reviewPeriod.start, "PPP")
+                                        ) : (
+                                            <span>Start date</span>
+                                        )}
+                                    </Button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-auto p-0">
+                                    <Calendar
+                                        mode="single"
+                                        selected={formData.reviewPeriod?.start}
+                                        captionLayout="dropdown"
+                                        onSelect={(date) => setFormData(prev => ({
+                                            ...prev,
+                                            reviewPeriod: { ...prev.reviewPeriod!, start: date! }
+                                        }))}
+                                        initialFocus
+                                    />
+                                </PopoverContent>
+                            </Popover>
+                        </div>
+                        <div className="space-y-2">
+                            <Label>Review Period End Date</Label>
+                            <Popover>
+                                <PopoverTrigger asChild>
+                                    <Button
+                                        variant="outline"
+                                        className={cn(
+                                            "w-full justify-start text-left font-normal",
+                                            !formData.reviewPeriod?.end && "text-muted-foreground"
+                                        )}
+                                    >
+                                        <CalendarIcon className="mr-2 h-4 w-4" />
+                                        {formData.reviewPeriod?.end ? (
+                                            format(formData.reviewPeriod.end, "PPP")
+                                        ) : (
+                                            <span>End date</span>
+                                        )}
+                                    </Button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-auto p-0">
+                                    <Calendar
+                                        mode="single"
+                                        selected={formData.reviewPeriod?.end} captionLayout="dropdown"
+                                        onSelect={(date) => setFormData(prev => ({
+                                            ...prev,
+                                            reviewPeriod: { ...prev.reviewPeriod!, end: date! }
+                                        }))}
+                                        initialFocus
+                                    />
+                                </PopoverContent>
+                            </Popover>
+                        </div>
+                        <div className="space-y-2">
+                            <Button className='mt-[0] md:mt-[20px] cursor-pointer' type="button" onClick={calculateOverallRating} variant="default">
+                                <Calculator className='h-4 w-4 mr-2' /> Calculate Overall Rating
+                            </Button>
                         </div>
                     </div>
 
@@ -277,9 +314,6 @@ export const PerformanceReviewForm: React.FC<PerformanceReviewFormProps> = ({
                     <div className="space-y-4">
                         <div className="flex items-center justify-between">
                             <Label className="text-lg font-semibold">KRA/KPI</Label>
-                            <Button type="button" onClick={calculateOverallRating} variant="outline">
-                                Calculate Overall Rating
-                            </Button>
                         </div>
 
                         {/* Add New KRA */}
@@ -344,7 +378,7 @@ export const PerformanceReviewForm: React.FC<PerformanceReviewFormProps> = ({
                                         />
                                     </div>
                                 </div>
-                                <Button type="button" onClick={addKRA} className="mt-4" variant="outline">
+                                <Button type="button" onClick={addKRA} className="mt-4 cursor-pointer" variant="default">
                                     <Plus className="h-4 w-4 mr-2" />
                                     Add KRA
                                 </Button>
@@ -492,7 +526,7 @@ export const PerformanceReviewForm: React.FC<PerformanceReviewFormProps> = ({
                                         }))
                                     }
                                 >
-                                    <SelectTrigger>
+                                    <SelectTrigger className='w-full'>
                                         <SelectValue placeholder="Select performance level" />
                                     </SelectTrigger>
                                     <SelectContent>
