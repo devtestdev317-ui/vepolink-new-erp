@@ -275,7 +275,7 @@ export class PDFService {
         let yPosition = 20;
 
         // Add Header
-        await this.addPerformanceReportHeader(pdf, review, yPosition);
+        await this.addPerformanceReportHeader(pdf, review);
         yPosition = 45;
 
         // Add Employee & Review Details
@@ -323,7 +323,7 @@ export class PDFService {
         pdf.save(fileName);
     }
 
-    private static async addPerformanceReportHeader(pdf: jsPDF, review: PerformanceReview, yPosition: number): Promise<void> {
+    private static async addPerformanceReportHeader(pdf: jsPDF, review: PerformanceReview): Promise<void> {
 
         const pageWidth = pdf.internal.pageSize.getWidth();
         // Company Logo and Header
@@ -601,7 +601,7 @@ export class PDFService {
             pdf.setFontSize(9);
             pdf.setFont('helvetica', 'normal');
 
-            assessment.recommendations.forEach((rec, index) => {
+            assessment.recommendations.forEach((rec) => {
                 if (yPosition > 270) {
                     pdf.addPage();
                     yPosition = 20;
@@ -628,7 +628,7 @@ export class PDFService {
             pdf.setFontSize(9);
             pdf.setFont('helvetica', 'normal');
 
-            assessment.nextPeriodGoals.forEach((goal, index) => {
+            assessment.nextPeriodGoals.forEach((goal) => {
                 if (yPosition > 270) {
                     pdf.addPage();
                     yPosition = 20;

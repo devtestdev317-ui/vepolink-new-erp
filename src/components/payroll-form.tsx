@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
 import type { PayrollRecord, AttendanceData } from '@/types/payroll';
 import { PDFService } from '@/lib/pdf-service';
 import { SalarySlipTemplate } from '@/components/salary-slip-template';
