@@ -29,6 +29,8 @@ export const PayrollForm: React.FC<PayrollFormProps> = ({ onSubmit,
 
     const [open, setOpen] = React.useState(false);
     const [formData, setFormData] = useState<Partial<PayrollRecord>>({
+        employeeName: '',
+        employeeId: '',
         salaryMonth: new Date(),
         basic: 0,
         hra: 0,
@@ -197,8 +199,8 @@ export const PayrollForm: React.FC<PayrollFormProps> = ({ onSubmit,
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div className="space-y-2">
-                            <Label htmlFor="employee">Select Employee</Label>
-                            <Select value={selectedEmployee} onValueChange={setSelectedEmployee}>
+                            <Label htmlFor="employee">Select Employee {formData?.employeeName}</Label>
+                            <Select value={selectedEmployee} onValueChange={setSelectedEmployee} defaultValue={formData.employeeName || ''}>
                                 <SelectTrigger className='w-full'>
                                     <SelectValue placeholder="Select employee" />
                                 </SelectTrigger>

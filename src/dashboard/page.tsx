@@ -189,6 +189,7 @@ export default function DashboardPage() {
                 { id: '3', title: 'Attendance', href: 'attendance', icon: <Eye size={"18px"} className="ml-0" /> },
                 { id: '4', title: 'Payroll & Compliance', href: 'payroll', icon: <Eye size={"18px"} className="ml-0" /> },
                 { id: '5', title: 'Performance Management', href: 'performance', icon: <Eye size={"18px"} className="ml-0" /> },
+                { id: '6', title: 'Training & Development', href: 'training-development', icon: <Eye size={"18px"} className="ml-0" /> },
 
             ]
         },

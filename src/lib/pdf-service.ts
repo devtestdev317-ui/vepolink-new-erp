@@ -2,7 +2,7 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import type { PayrollRecord } from '@/types/payroll';
 import type { PerformanceReview } from '@/types/performance';
-
+import type { SkillDevelopmentReport} from '@/types/training';
 export class PDFService {
     static async generateSalarySlip(payroll: PayrollRecord, element?: HTMLElement): Promise<void> {
         const pdf = new jsPDF('portrait', 'mm', 'a4');
@@ -659,4 +659,150 @@ export class PDFService {
     private static formatDateForFilename(date: Date): string {
         return date.toISOString().split('T')[0]; // YYYY-MM-DD format
     }
+   static generateTrainingReport(report: SkillDevelopmentReport & any) {
+        const doc = new jsPDF();
+        let yPosition = 20;
+
+        // Title
+        doc.setFontSize(20);
+        doc.setTextColor(33, 37, 41);
+        doc.text('Skill Development Report', 20, yPosition);
+        yPosition += 15;
+
+        // Report Metadata
+        doc.setFontSize(10);
+        doc.setTextColor(108, 117, 125);
+        doc.text(`Generated on: ${report.generatedDate.toLocaleDateString()}`, 20, yPosition);
+        doc.text(`Period: ${report.period.start.toLocaleDateString()} - ${report.period.end.toLocaleDateString()}`, 20, yPosition + 5);
+        yPosition += 20;
+
+        // Summary Section
+        doc.setFontSize(16);
+        doc.setTextColor(33, 37, 41);
+        doc.text('Executive Summary', 20, yPosition);
+        yPosition += 10;
+
+        doc.setFontSize(10);
+        const summaryLines = [
+            `Total Training Programs: ${report.summary.totalTrainings}`,
+            `Completed Programs: ${report.summary.completedTrainings}`,
+            `Ongoing Programs: ${report.summary.ongoingTrainings}`,
+            `Total Participants: ${report.summary.totalParticipants}`,
+            `Total Investment: ₹${report.summary.totalCost.toLocaleString('en-IN')}`,
+            `Average Participant Rating: ${report.summary.averageParticipantRating.toFixed(1)}/5`
+        ];
+
+        summaryLines.forEach(line => {
+            doc.text(`• ${line}`, 25, yPosition);
+            yPosition += 6;
+        });
+
+        yPosition += 10;
+
+        // Training Effectiveness
+        if (report.trainingEffectiveness && report.trainingEffectiveness.length > 0) {
+            doc.addPage();
+            yPosition = 20;
+
+            doc.setFontSize(16);
+            doc.text('Training Effectiveness', 20, yPosition);
+            yPosition += 15;
+
+            doc.setFontSize(10);
+            report.trainingEffectiveness.forEach((effectiveness: any, index: number) => {
+                if (yPosition > 250) {
+                    doc.addPage();
+                    yPosition = 20;
+                }
+
+                doc.setFontSize(12);
+                doc.setTextColor(33, 37, 41);
+                doc.text(`${index + 1}. ${effectiveness.trainingTitle}`, 20, yPosition);
+                yPosition += 8;
+
+                doc.setFontSize(10);
+                doc.setTextColor(108, 117, 125);
+                const details = [
+                    `Attendance Rate: ${(effectiveness.attendanceRate * 100).toFixed(1)}%`,
+                    `Average Rating: ${effectiveness.averageRating.toFixed(1)}/5`,
+                    `Skills Improved: ${effectiveness.skillImprovements.join(', ')}`
+                ];
+
+                details.forEach(detail => {
+                    doc.text(`  ${detail}`, 25, yPosition);
+                    yPosition += 6;
+                });
+
+                yPosition += 5;
+            });
+        }
+
+        // Recommendations
+        if (report.recommendations && report.recommendations.length > 0) {
+            doc.addPage();
+            yPosition = 20;
+
+            doc.setFontSize(16);
+            doc.setTextColor(33, 37, 41);
+            doc.text('Recommendations', 20, yPosition);
+            yPosition += 15;
+
+            doc.setFontSize(10);
+            report.recommendations.forEach((recommendation: string, index: number) => {
+                if (yPosition > 270) {
+                    doc.addPage();
+                    yPosition = 20;
+                }
+                doc.text(`${index + 1}. ${recommendation}`, 25, yPosition);
+                yPosition += 8;
+            });
+        }
+
+        // Save the PDF
+        doc.save(`skill-development-report-${new Date().toISOString().split('T')[0]}.pdf`);
+    }
+
+    static generateTrainingCertificate(employeeName: string, trainingTitle: string, completionDate: Date) {
+        const doc = new jsPDF();
+
+        // Certificate border
+        doc.setDrawColor(212, 175, 55);
+        doc.setLineWidth(2);
+        doc.rect(10, 10, 190, 277);
+
+        // Certificate title
+        doc.setFontSize(30);
+        doc.setTextColor(212, 175, 55);
+        doc.text('CERTIFICATE OF COMPLETION', 105, 60, { align: 'center' });
+
+        // Body text
+        doc.setFontSize(16);
+        doc.setTextColor(0, 0, 0);
+        doc.text('This is to certify that', 105, 100, { align: 'center' });
+
+        // Employee name
+        doc.setFontSize(24);
+        doc.setTextColor(33, 37, 41);
+        doc.text(employeeName, 105, 120, { align: 'center' });
+
+        // Completion text
+        doc.setFontSize(16);
+        doc.setTextColor(0, 0, 0);
+        doc.text('has successfully completed the training program', 105, 140, { align: 'center' });
+
+        // Training title
+        doc.setFontSize(20);
+        doc.setTextColor(33, 37, 41);
+        doc.text(trainingTitle, 105, 160, { align: 'center' });
+
+        // Date
+        doc.setFontSize(12);
+        doc.setTextColor(108, 117, 125);
+        doc.text(`Completed on: ${completionDate.toLocaleDateString()}`, 105, 200, { align: 'center' });
+
+        // Save certificate
+        doc.save(`certificate-${employeeName.replace(/\s+/g, '-')}.pdf`);
+    }
+
+
 }
