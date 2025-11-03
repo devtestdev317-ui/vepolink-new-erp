@@ -30,6 +30,8 @@ import VendorDetail from './dashboard/vendor/view/page.tsx';
 import UpdateVendor from './dashboard/vendor/update/page.tsx';
 import PerformanceManagementPage from './dashboard/performance/page.tsx';
 import TrainingPage from './dashboard/training/page.tsx';
+import PolicyManagementPage from './dashboard/policy-management/page.tsx';
+import { EmployeeEngagementPage } from './dashboard/employee-engagement/page.tsx';
 const Routes = createBrowserRouter([
   {
     path: "/",
@@ -143,6 +145,14 @@ const Routes = createBrowserRouter([
       {
         path: 'training-development',
         element: <TrainingPage />
+      },
+      {
+        path: 'policy-management',
+        element: <PolicyManagementPage />
+      },
+      {
+        path: 'employee-engagement',
+        element: <EmployeeEngagementPage />
       },
     ],
   },
