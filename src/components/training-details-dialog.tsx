@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import type { TrainingProgram } from '@/types/training';
 import { Calendar, Users, IndianRupee, Mail, Clock } from 'lucide-react';
-
+import { ScrollArea } from "@/components/ui/scroll-area"
 interface TrainingDetailsDialogProps {
     training: TrainingProgram | null;
     open: boolean;
@@ -46,83 +46,85 @@ export const TrainingDetailsDialog: React.FC<TrainingDetailsDialogProps> = ({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent style={{ maxWidth: '992px', width: '100%' }}>
-                <DialogHeader className='border-b pb-3'>
-                    <DialogTitle className="flex items-center gap-x-5 mb-0">
-                        <span>{training.title}</span>
-                        <Badge variant={getStatusVariant(training.status)}>
-                            {training.status.toUpperCase()}
-                        </Badge>
-                    </DialogTitle>
-                    <DialogDescription>
-                        Training program details and information
-                    </DialogDescription>
-                </DialogHeader>
+            <DialogContent className='w-[100%]'>
+                <ScrollArea className="h-[80vh] w-full rounded-md border]">
+                    <DialogHeader className='border-b pb-3'>
+                        <DialogTitle className="flex items-center text-left gap-x-5 mb-0">
+                            <span>{training.title}</span>
+                            <Badge variant={getStatusVariant(training.status)}>
+                                {training.status.toUpperCase()}
+                            </Badge>
+                        </DialogTitle>
+                        <DialogDescription className='text-left'>
+                            Training program details and information
+                        </DialogDescription>
+                    </DialogHeader>
 
-                <div className="space-y-6">
-                    {/* Basic Information */}
-                    <div>
-                        <h4 className="font-semibold mb-2">Description</h4>
-                        <p className="text-muted-foreground">{training.description}</p>
-                    </div>
+                    <div className="space-y-6">
+                        {/* Basic Information */}
+                        <div>
+                            <h4 className="font-semibold mb-2">Description</h4>
+                            <p className="text-muted-foreground">{training.description}</p>
+                        </div>
 
-                    {/* Schedule & Details */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-accent p-3">
-                        <div className="space-y-3">
-                            <h4 className="font-semibold">Schedule & Details</h4>
-                            <div className="space-y-2">
-                                <div className="flex items-center gap-2">
-                                    <Calendar className="h-4 w-4" />
-                                    <span>
-                                        {training.startDate.toLocaleDateString()} - {training.endDate.toLocaleDateString()}
-                                    </span>
+                        {/* Schedule & Details */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-accent p-3">
+                            <div className="space-y-3">
+                                <h4 className="font-semibold">Schedule & Details</h4>
+                                <div className="space-y-2">
+                                    <div className="flex items-center gap-2">
+                                        <Calendar className="h-4 w-4" />
+                                        <span>
+                                            {training.startDate.toLocaleDateString()} - {training.endDate.toLocaleDateString()}
+                                        </span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <Clock className="h-4 w-4" />
+                                        <span>{training.duration} days</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <Users className="h-4 w-4" />
+                                        <span>Max {training.maxParticipants} participants</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <IndianRupee className="h-4 w-4" />
+                                        <span>{training.cost.toLocaleString('en-IN')}</span>
+                                    </div>
                                 </div>
-                                <div className="flex items-center gap-2">
-                                    <Clock className="h-4 w-4" />
-                                    <span>{training.duration} days</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <Users className="h-4 w-4" />
-                                    <span>Max {training.maxParticipants} participants</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <IndianRupee className="h-4 w-4" />
-                                    <span>{training.cost.toLocaleString('en-IN')}</span>
+                            </div>
+
+                            {/* Trainer Information */}
+                            <div className="space-y-3">
+                                <h4 className="font-semibold">Trainer Information</h4>
+                                <div className="space-y-2">
+                                    <div className="font-medium">{training.trainer}</div>
+                                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                        <Mail className="h-4 w-4" />
+                                        <span>{training.trainerEmail}</span>
+                                    </div>
+                                    <div className="text-sm text-muted-foreground">
+                                        {training.trainerSpecialization}
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Trainer Information */}
-                        <div className="space-y-3">
-                            <h4 className="font-semibold">Trainer Information</h4>
-                            <div className="space-y-2">
-                                <div className="font-medium">{training.trainer}</div>
-                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                    <Mail className="h-4 w-4" />
-                                    <span>{training.trainerEmail}</span>
-                                </div>
-                                <div className="text-sm text-muted-foreground">
-                                    {training.trainerSpecialization}
-                                </div>
-                            </div>
+                        {/* Category */}
+                        <div>
+                            <h4 className="font-semibold mb-2">Category</h4>
+                            <Badge variant="outline" className={getCategoryColor(training.category)}>
+                                {training.category.replace('-', ' ')}
+                            </Badge>
+                        </div>
+
+                        {/* Actions */}
+                        <div className="flex gap-2 pt-4 border-t justify-end">
+                            <Button variant="outline" onClick={() => onOpenChange(false)}>
+                                Close
+                            </Button>
                         </div>
                     </div>
-
-                    {/* Category */}
-                    <div>
-                        <h4 className="font-semibold mb-2">Category</h4>
-                        <Badge variant="outline" className={getCategoryColor(training.category)}>
-                            {training.category.replace('-', ' ')}
-                        </Badge>
-                    </div>
-
-                    {/* Actions */}
-                    <div className="flex gap-2 pt-4 border-t justify-end">
-                        <Button variant="outline" onClick={() => onOpenChange(false)}>
-                            Close
-                        </Button>
-                    </div>
-                </div>
+                </ScrollArea>
             </DialogContent>
         </Dialog>
     );

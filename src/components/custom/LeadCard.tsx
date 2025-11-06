@@ -86,7 +86,7 @@ const initialTemplate: TemplateItem = {
 
 export default function LeadCard({ data }: LeadCardProps) {
     return (
-        <div className="flex flex-wrap">
+        <div className="flex flex-wrap md:space-y-0 space-y-2.5">
             {SalesManagerLeadData.map((item) => (
                 <LeadCardItem
                     key={item.leadId}

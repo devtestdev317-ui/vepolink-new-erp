@@ -99,7 +99,7 @@ export default function UpdateVendor({ defaultValues }: VendorFormProps) {
     return (
         <div className="w-full p-3 md:p-7">
             <DashboardStrip title="Vendor/Update Vendor" />
-            <Card className="p-2 md:p-4 lg:p-7 rounded-xl border border-slate-200/60 dark:border-slate-700/60 mt-4 gap-4">
+            <Card className="p-3 md:p-4 lg:p-7 rounded-xl border border-slate-200/60 dark:border-slate-700/60 mt-4 gap-4">
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
                         {/* Vendor Basic Information */}
@@ -162,14 +162,14 @@ export default function UpdateVendor({ defaultValues }: VendorFormProps) {
 
 
                         {/* Vendor Items */}
-                        <Card className="p-4 rounded">
+                        <Card className="md:p-4 p-2 rounded">
 
                             <div className="space-y-4">
                                 <div className="flex justify-between items-center">
                                     <h3 className="text-lg font-semibold">Vendor Items</h3>
                                 </div>
                                 {fields.map((field, index) => (
-                                    <div key={field.id} className="border rounded-lg p-6 space-y-4">
+                                    <div key={field.id} className="border rounded-lg md:p-6 p-3 space-y-4">
                                         <div className="flex justify-between items-center">
                                             <h4 className="font-medium">Item {index + 1}</h4>
                                             {fields.length > 1 && (

@@ -10,10 +10,10 @@ export default function VendorDetail() {
     // const { vendor_name: leadId, ... } = lead || {};
     console.log(VendorDetails)
     return (
-        <div className="w-full p-7">
+        <div className="w-full md:p-7 p-4">
             <DashboardStrip title={`Vendor Detail: ${id}`} />
-            <Card className="p-2 md:p-4 lg:p-4 rounded border border-slate-200/60 dark:border-slate-700/60 mt-4 gap-4">
-                <div className="grid grid-cols-4 gap-2">
+            <Card className="p-3 md:p-4 lg:p-4 rounded border border-slate-200/60 dark:border-slate-700/60 mt-4 gap-4">
+                <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-2">
                     <div className="flex flex-col space-y-1.5">
                         <div className="text-sm font-medium">Vendor Name</div>
                         <div className="p-2 border rounded">{VendorDetails?.vendor_name}</div>

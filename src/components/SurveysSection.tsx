@@ -276,9 +276,9 @@ export const SurveysSection: React.FC<SurveysSectionProps> = ({
                     return (
                         <Card key={survey.id} className="hover:shadow-md transition-shadow">
                             <CardHeader>
-                                <div className="flex items-start justify-between">
-                                    <div className="flex-1">
-                                        <CardTitle className="text-lg flex items-center space-x-2">
+                                <div className="flex flex-wrap items-start justify-between">
+                                    <div className="md:flex-1 w-full">
+                                        <CardTitle className="md:text-lg text-sm flex items-center space-x-2">
                                             <BarChart3 className="h-5 w-5 text-blue-500" />
                                             <span>{survey.title}</span>
                                         </CardTitle>
@@ -286,7 +286,7 @@ export const SurveysSection: React.FC<SurveysSectionProps> = ({
                                             {survey.description}
                                         </CardDescription>
                                     </div>
-                                    <Badge variant={getStatusVariant(survey.status)} className="ml-2">
+                                    <Badge variant={getStatusVariant(survey.status)} className="md:ml-2 ml-auto">
                                         {getStatusIcon(survey.status)}
                                         <span className="ml-1">{survey.status}</span>
                                     </Badge>
@@ -324,11 +324,11 @@ export const SurveysSection: React.FC<SurveysSectionProps> = ({
                                                     )}
                                                 </Button>
                                             </DialogTrigger>
-                                            <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                                            <DialogContent className="max-w-2xl block w-[90%] max-h-[80vh] overflow-y-auto">
                                                 <DialogHeader>
-                                                    <DialogTitle>{survey.title}</DialogTitle>
+                                                    <DialogTitle className='text-left'>{survey.title}</DialogTitle>
                                                 </DialogHeader>
-                                                <div className="space-y-6 mt-4">
+                                                <div className="space-y-5 mt-2">
                                                     <p className="text-gray-600">{survey.description}</p>
 
                                                     <div className="space-y-6">

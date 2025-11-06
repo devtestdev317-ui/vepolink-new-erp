@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 //  isToday, isThisMonth
-import { format} from 'date-fns';
+import { format } from 'date-fns';
 import { Calendar as CalendarIcon, Cake, Star, PartyPopper, Plus, MoreVertical, Edit, Trash2 } from 'lucide-react';
 import type { CalendarEvent, CreateEventData } from '@/types/employee-engagement';
 import { Button } from './ui/button';
@@ -87,12 +87,12 @@ export const EventCalendar: React.FC<EventCalendarProps> = ({
   return (
     <div className="space-y-6">
       {/* Header with Add Event Button */}
-      <div className="flex items-center justify-between">
-        <div>
+      <div className="flex flex-wrap items-center justify-between">
+        <div className='md:mb-0 mb-3'>
           <h2 className="text-2xl font-bold text-gray-900">Event Calendar</h2>
           <p className="text-gray-600">View and manage company events, birthdays, and anniversaries</p>
         </div>
-        
+
         <Dialog open={isAddEventDialogOpen} onOpenChange={setIsAddEventDialogOpen}>
           <DialogTrigger asChild>
             <Button>
@@ -104,7 +104,7 @@ export const EventCalendar: React.FC<EventCalendarProps> = ({
             <DialogHeader>
               <DialogTitle>Create New Event</DialogTitle>
             </DialogHeader>
-            <AddEventForm 
+            <AddEventForm
               onSubmit={handleAddEvent}
               onCancel={() => setIsAddEventDialogOpen(false)}
             />
@@ -138,12 +138,12 @@ export const EventCalendar: React.FC<EventCalendarProps> = ({
               <span>Event Calendar</span>
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className='md:px-6 px-2 '>
             <Calendar
               mode="single"
               selected={selectedDate}
               onSelect={setSelectedDate}
-              className="rounded-md border"
+              className="rounded-md border md:w-fit lg:w-fit w-full"
               modifiers={{
                 event: events.map(event => event.date),
                 today: new Date()
@@ -162,7 +162,7 @@ export const EventCalendar: React.FC<EventCalendarProps> = ({
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
-                <span>
+                <span className='md:w-auto w-full md:text-left text-center'>
                   {selectedDate ? format(selectedDate, 'MMMM d, yyyy') : 'Select a date'}
                 </span>
                 {dateEvents.length > 0 && (
@@ -177,9 +177,9 @@ export const EventCalendar: React.FC<EventCalendarProps> = ({
                 <div className="text-center py-8">
                   <CalendarIcon className="h-12 w-12 text-gray-300 mx-auto mb-3" />
                   <p className="text-gray-500 text-sm">No events scheduled for this date.</p>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
+                  <Button
+                    variant="outline"
+                    size="sm"
                     className="mt-3"
                     onClick={() => setIsAddEventDialogOpen(true)}
                   >
@@ -209,7 +209,7 @@ export const EventCalendar: React.FC<EventCalendarProps> = ({
                             <Edit className="h-4 w-4 mr-2" />
                             Edit
                           </DropdownMenuItem>
-                          <DropdownMenuItem 
+                          <DropdownMenuItem
                             onClick={() => handleDeleteEvent(event.id)}
                             className="text-red-600"
                           >
@@ -242,11 +242,11 @@ export const EventCalendar: React.FC<EventCalendarProps> = ({
           {/* Upcoming Events */}
           <Card>
             <CardHeader>
-              <CardTitle>Upcoming Events</CardTitle>
+              <CardTitle className='md:text-left text-center'>Upcoming Events</CardTitle>
             </CardHeader>
             <CardContent>
               {upcomingEvents.length === 0 ? (
-                <p className="text-gray-500 text-sm">No upcoming events.</p>
+                <p className="text-gray-500 text-sm md:text-left text-center">No upcoming events.</p>
               ) : (
                 <div className="space-y-3">
                   {upcomingEvents.map(event => (

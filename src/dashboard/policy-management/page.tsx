@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from "sonner";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import {
     Dialog,
     DialogContent,
@@ -336,7 +337,7 @@ const PolicyManagementPage: React.FC = () => {
             {/* Header */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight">Policy & Document Management</h1>
+                    <h1 className="md:text-3xl text-2xl font-bold tracking-tight">Policy & Document Management</h1>
                     <p className="text-muted-foreground mt-2">
                         Access and manage all company policies and documents in one place
                     </p>
@@ -562,15 +563,18 @@ const PolicyManagementPage: React.FC = () => {
                 {/* Document List */}
                 <div className="lg:col-span-3">
                     <Tabs defaultValue="all" className="space-y-6">
-                        <TabsList>
-                            <TabsTrigger value="all">All Documents</TabsTrigger>
-                            <TabsTrigger value="recent">Recently Updated</TabsTrigger>
-                            <TabsTrigger value="my-uploads">My Uploads</TabsTrigger>
-                        </TabsList>
+                        <ScrollArea className="w-full rounded-md border whitespace-nowrap">
+                            <TabsList className='flex w-full whitespace-nowrap'>
+                                <TabsTrigger className='flex-1' value="all">All Documents</TabsTrigger>
+                                <TabsTrigger className='flex-1' value="recent">Recently Updated</TabsTrigger>
+                                <TabsTrigger className='flex-1' value="my-uploads">My Uploads</TabsTrigger>
+                            </TabsList>
+                            <ScrollBar orientation="horizontal" />
+                        </ScrollArea>
 
                         <TabsContent value="all" className="space-y-4">
                             {filteredDocuments.length === 0 ? (
-                                <Card>
+                                <Card className='p-0'>
                                     <CardContent className="flex flex-col items-center justify-center py-12">
                                         <FileText className="h-12 w-12 text-muted-foreground mb-4" />
                                         <p className="text-lg font-medium mb-2">No policies found</p>
@@ -581,7 +585,7 @@ const PolicyManagementPage: React.FC = () => {
                                 </Card>
                             ) : (
                                 filteredDocuments.map((document) => (
-                                    <Card key={document.id} className="hover:shadow-md transition-shadow">
+                                    <Card key={document.id} className="hover:shadow-md transition-shadow p-0">
                                         <CardContent className="p-6">
                                             <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                                                 <div className="flex-1 space-y-3">
@@ -634,6 +638,28 @@ const PolicyManagementPage: React.FC = () => {
                                     </Card>
                                 ))
                             )}
+                        </TabsContent>
+                        <TabsContent value='recent'>
+                            <Card className='p-0'>
+                                <CardContent className="flex flex-col items-center justify-center py-12">
+                                    <FileText className="h-12 w-12 text-muted-foreground mb-4" />
+                                    <p className="text-lg font-medium mb-2">No Recent policies found</p>
+                                    {/* <p className="text-muted-foreground text-center">
+                                        No policies match your search criteria. Try adjusting your filters.
+                                    </p> */}
+                                </CardContent>
+                            </Card>
+                        </TabsContent>
+                        <TabsContent value='my-uploads'>
+                            <Card className='p-0'>
+                                <CardContent className="flex flex-col items-center justify-center py-12">
+                                    <FileText className="h-12 w-12 text-muted-foreground mb-4" />
+                                    <p className="text-lg font-medium mb-2">No policies found</p>
+                                    <p className="text-muted-foreground text-center">
+                                        No policies match your profile criteria.
+                                    </p>
+                                </CardContent>
+                            </Card>
                         </TabsContent>
                     </Tabs>
                 </div>

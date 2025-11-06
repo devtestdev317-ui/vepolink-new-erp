@@ -6,10 +6,10 @@ import { PayrollList } from '@/components/payroll-list';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import type { PayrollRecord, AttendanceData } from '@/types/payroll';
-import { Plus, FileText} from 'lucide-react';
+import { Plus, FileText } from 'lucide-react';
 import { PDFService } from '@/lib/pdf-service'
 import { toast } from 'sonner';
-
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 // Mock data - replace with actual API calls
 const mockAttendanceData: AttendanceData[] = [
     {
@@ -166,14 +166,14 @@ export default function PayrollPage() {
     return (
         <div className="w-full p-3 md:p-7">
             <div className="container mx-auto py-6 space-y-6">
-                <div className="flex justify-between items-center">
-                    <div>
+                <div className="flex flex-wrap justify-between items-center">
+                    <div className='md:mb-0 mb-3'>
                         <h1 className="text-3xl font-bold">Payroll & Compliance</h1>
                         <p className="text-muted-foreground">
                             Manage employee payroll, generate salary slips, and compliance documents
                         </p>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex flex-wrap gap-2">
                         <Button variant="outline" onClick={generatePFChallan}>
                             <FileText className="h-4 w-4 mr-2" />
                             PF Challan
@@ -190,20 +190,23 @@ export default function PayrollPage() {
                 </div>
 
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-                    <TabsList className="grid w-full grid-cols-3">
-                        <TabsTrigger value="create" className="flex items-center gap-2">
-                            <Plus className="h-4 w-4" />
-                            Create Payroll
-                        </TabsTrigger>
-                        <TabsTrigger value="records" className="flex items-center gap-2">
-                            <FileText className="h-4 w-4" />
-                            Payroll Records
-                        </TabsTrigger>
-                        {/* <TabsTrigger value="settlement" className="flex items-center gap-2">
+                    <ScrollArea className="w-full rounded-md border whitespace-nowrap">
+                        <TabsList className="flex w-full whitespace-nowrap">
+                            <TabsTrigger value="create" className="flex-1 flex items-center gap-2">
+                                <Plus className="h-4 w-4" />
+                                Create Payroll
+                            </TabsTrigger>
+                            <TabsTrigger value="records" className="flex-1 flex items-center gap-2">
+                                <FileText className="h-4 w-4" />
+                                Payroll Records
+                            </TabsTrigger>
+                            {/* <TabsTrigger value="settlement" className="flex items-center gap-2">
                             <Download className="h-4 w-4" />
                             Full & Final
                         </TabsTrigger> */}
-                    </TabsList>
+                        </TabsList>
+                        <ScrollBar orientation="horizontal" />
+                    </ScrollArea>
 
                     <TabsContent value="create">
                         <PayrollForm

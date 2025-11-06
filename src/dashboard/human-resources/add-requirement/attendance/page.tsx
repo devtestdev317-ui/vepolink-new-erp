@@ -6,8 +6,9 @@ import AttendanceRecordForm from '@/components/attendance/AttendanceRecordForm';
 import LeaveApplicationForm from '@/components/attendance/LeaveApplicationForm';
 import AttendanceSummary from '@/components/attendance/AttendanceSummary';
 import LeaveBalances from '@/components/attendance/LeaveBalances';
-import type{ AttendanceRecord, LeaveBalance, MonthlySummary, LeaveType, ApprovalStatus } from '@/types/attendance';
+import type { AttendanceRecord, LeaveBalance, MonthlySummary, LeaveType, ApprovalStatus } from '@/types/attendance';
 
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 const AttendancePage: React.FC = () => {
     const [activeTab, setActiveTab] = useState('attendance');
     const [attendanceRecords, setAttendanceRecords] = useState<AttendanceRecord[]>([]);
@@ -82,12 +83,15 @@ const AttendancePage: React.FC = () => {
             </div>
 
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-                <TabsList className="grid w-full grid-cols-4">
-                    <TabsTrigger value="attendance">Attendance</TabsTrigger>
-                    <TabsTrigger value="leave">Leave Application</TabsTrigger>
-                    <TabsTrigger value="summary">Monthly Summary</TabsTrigger>
-                    <TabsTrigger value="balances">Leave Balances</TabsTrigger>
-                </TabsList>
+                <ScrollArea className="w-full rounded-md border whitespace-nowrap">
+                    <TabsList className="flex w-full whitespace-nowrap">
+                        <TabsTrigger value="attendance" className="flex-1">Attendance</TabsTrigger>
+                        <TabsTrigger value="leave" className="flex-1">Leave Application</TabsTrigger>
+                        <TabsTrigger value="summary" className="flex-1">Monthly Summary</TabsTrigger>
+                        <TabsTrigger value="balances" className="flex-1">Leave Balances</TabsTrigger>
+                    </TabsList>
+                    <ScrollBar orientation="horizontal" />
+                </ScrollArea>
 
                 <TabsContent value="attendance" className="space-y-6">
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

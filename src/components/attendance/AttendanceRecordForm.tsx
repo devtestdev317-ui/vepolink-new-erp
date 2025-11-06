@@ -92,7 +92,7 @@ const AttendanceRecordForm: React.FC<AttendanceRecordFormProps> = ({ onSubmit })
               <FormLabel>Shift</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger className='w-full'>
                     <SelectValue placeholder="Select shift" />
                   </SelectTrigger>
                 </FormControl>
@@ -144,8 +144,8 @@ const AttendanceRecordForm: React.FC<AttendanceRecordFormProps> = ({ onSubmit })
             <FormItem>
               <FormLabel>OT Hours</FormLabel>
               <FormControl>
-                <Input 
-                  type="number" 
+                <Input
+                  type="number"
                   step="0.5"
                   min="0"
                   {...field}

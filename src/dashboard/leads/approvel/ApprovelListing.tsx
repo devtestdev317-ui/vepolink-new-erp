@@ -240,43 +240,40 @@ export default function QuoteApprovelPage() {
         <div className="w-full lg:p-7 p-2">
             <DashboardStrip title="Request for Approvel" />
             <Card className="w-full p-4">
-                <div className="flex items-center justify-between mb-4">
-                    <div className="relative">
+                <div className="flex flex-wrap items-center justify-between md:space-y-0 space-y-2.5 mb-4 md:gap-0 gap-x-1.5">
+                    <div className="relative md:w-auto w-full">
                         <Input
                             placeholder="Search across all fields..."
                             value={globalFilter ?? ""}
                             onChange={(event) => setGlobalFilter(event.target.value)}
-                            className="max-w-sm h-[40px] w-[320px] pl-[40px]"
+                            className="md:max-w-sm h-[40px] w-full md:w-[320px] pl-[40px]"
                         />
                         <Search className="size-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
                     </div>
-                    <div className="flex items-center space-x-2">
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="outline" className="h-[40px] ml-auto">
-                                    Table Columns <ChevronDown className="ml-2 h-4 w-4" />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="max-h-[220px] overflow-y-auto">
-                                {table
-                                    .getAllColumns()
-                                    .filter((column) => column.getCanHide())
-                                    .map((column) => {
-                                        return (
-                                            <DropdownMenuCheckboxItem
-                                                key={column.id}
-                                                className="capitalize cursor-pointer"
-                                                checked={column.getIsVisible()}
-                                                onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                                            >
-                                                {column.id}
-                                            </DropdownMenuCheckboxItem>
-                                        )
-                                    })}
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-
-                    </div>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="outline" className="h-[40px] md:w-auto w-full md:ml-auto">
+                                Table Columns <ChevronDown className="ml-2 h-4 w-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="max-h-[220px] overflow-y-auto">
+                            {table
+                                .getAllColumns()
+                                .filter((column) => column.getCanHide())
+                                .map((column) => {
+                                    return (
+                                        <DropdownMenuCheckboxItem
+                                            key={column.id}
+                                            className="capitalize cursor-pointer"
+                                            checked={column.getIsVisible()}
+                                            onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                                        >
+                                            {column.id}
+                                        </DropdownMenuCheckboxItem>
+                                    )
+                                })}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </div>
 
                 <div className="rounded-md border">
@@ -373,14 +370,14 @@ export default function QuoteApprovelPage() {
                     <DialogHeader className="flex space-y-2 flex-row gap-x-3 items-center">
                         <div className="w-[45px] h-[45px] rounded-[6px] bg-[#584ccc] flex flex-col items-center justify-center"><RotateCw size={30} stroke="#fff" /></div>
                         <div>
-                            <DialogTitle className="leading-6">Aproval</DialogTitle>
+                            <DialogTitle className="leading-6 text-left">Aproval</DialogTitle>
                             <div className="leading-5 text-xs text-gray-500">Create a new approval</div>
                         </div>
                     </DialogHeader>
                     <ScrollArea className="max-h-[360px] mr-[-10px] pr-[10px]">
 
                         <DialogDescription>
-                            <div className="flex flex-wrap gap-x-2 px-1.5">
+                            <div className="flex flex-wrap gap-x-2 md:px-1.5">
                                 {
                                     actTab === null ?
                                         <>

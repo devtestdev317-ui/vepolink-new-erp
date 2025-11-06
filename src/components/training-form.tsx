@@ -289,7 +289,7 @@ export const TrainingForm: React.FC<TrainingFormProps> = ({ onSubmit, editingTra
             </div>
           </div>
 
-          <div className="flex gap-4 pt-4">
+          <div className="flex flex-wrap gap-4 pt-4">
             <Button type="submit" className="flex-1">
               {editingTraining ? 'Update Training Program' : 'Schedule Training Program'}
             </Button>

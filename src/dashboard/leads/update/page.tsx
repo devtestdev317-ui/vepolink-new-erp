@@ -5,7 +5,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { BadgeAlert, Eye } from 'lucide-react';
-
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { SalesManagerLeadData } from "../../../dummy-data/SalesManagerDummyLeadData"
 import { SalesManagerLeadSchema } from "../../../schema/SalesManagerLeadSchema"
 import { Button, buttonVariants } from "@/components/ui/button"
@@ -830,37 +830,40 @@ export default function UpdateLeadPage() {
                                 <div className="px-3 py-2 border rounded">{selectedItem?.remark}</div>
                             </div>
                             <CardTitle className="mb-3">Specifications</CardTitle>
-                            <Table className="border">
-                                {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead className="w-[100px]">Model Number</TableHead>
-                                        <TableHead>Capacity</TableHead>
-                                        <TableHead>Dimensions</TableHead>
-                                        <TableHead>Material</TableHead>
-                                        <TableHead>Voltage</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    <TableRow>
-                                        <TableCell>
-                                            {selectedItem?.specifications.modelNumber}
-                                        </TableCell>
-                                        <TableCell>
-                                            {selectedItem?.specifications.capacity}
-                                        </TableCell>
-                                        <TableCell>
-                                            {selectedItem?.specifications.dimensions}
-                                        </TableCell>
-                                        <TableCell>
-                                            {selectedItem?.specifications.material}
-                                        </TableCell>
-                                        <TableCell>
-                                            {selectedItem?.specifications.voltage}
-                                        </TableCell>
-                                    </TableRow>
-                                </TableBody>
-                            </Table>
+                            <ScrollArea className="md:max-w-[768px] max-w-[300px] w-[100%]">
+                                <Table className="border w-full">
+                                    {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead className="w-[100px]">Model Number</TableHead>
+                                            <TableHead>Capacity</TableHead>
+                                            <TableHead>Dimensions</TableHead>
+                                            <TableHead>Material</TableHead>
+                                            <TableHead>Voltage</TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        <TableRow>
+                                            <TableCell>
+                                                {selectedItem?.specifications.modelNumber}
+                                            </TableCell>
+                                            <TableCell>
+                                                {selectedItem?.specifications.capacity}
+                                            </TableCell>
+                                            <TableCell>
+                                                {selectedItem?.specifications.dimensions}
+                                            </TableCell>
+                                            <TableCell>
+                                                {selectedItem?.specifications.material}
+                                            </TableCell>
+                                            <TableCell>
+                                                {selectedItem?.specifications.voltage}
+                                            </TableCell>
+                                        </TableRow>
+                                    </TableBody>
+                                </Table>
+                                <ScrollBar orientation="horizontal" />
+                            </ScrollArea>
 
                         </AlertDialogDescription>
                     </AlertDialogHeader>

@@ -68,8 +68,8 @@ export const SuggestionBox: React.FC<SuggestionBoxProps> = ({ suggestions, onAdd
 
     return (
         <div className="space-y-6">
-            <div className="flex items-center justify-between">
-                <div>
+            <div className="flex flex-wrap items-center justify-between">
+                <div className='mb-3'>
                     <h2 className="text-2xl font-bold text-gray-900">Suggestion Box</h2>
                     <p className="text-gray-600">Share your ideas to improve our workplace</p>
                 </div>
@@ -104,7 +104,7 @@ export const SuggestionBox: React.FC<SuggestionBoxProps> = ({ suggestions, onAdd
                                         setFormData(prev => ({ ...prev, category: value }))
                                     }
                                 >
-                                    <SelectTrigger>
+                                    <SelectTrigger className='w-full'>
                                         <SelectValue />
                                     </SelectTrigger>
                                     <SelectContent>

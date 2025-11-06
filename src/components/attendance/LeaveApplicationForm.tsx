@@ -12,7 +12,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { CalendarIcon } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
-import type{ LeaveType, LeaveBalance } from '@/types/attendance';
+import type { LeaveType, LeaveBalance } from '@/types/attendance';
 
 const leaveSchema = z.object({
   leaveType: z.enum(['CL', 'PL', 'SL']),
@@ -76,7 +76,7 @@ const LeaveApplicationForm: React.FC<LeaveApplicationFormProps> = ({ onSubmit, b
               <FormLabel>Leave Type</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger className='w-full'>
                     <SelectValue placeholder="Select leave type" />
                   </SelectTrigger>
                 </FormControl>
@@ -91,7 +91,7 @@ const LeaveApplicationForm: React.FC<LeaveApplicationFormProps> = ({ onSubmit, b
           )}
         />
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
           <FormField
             control={form.control}
             name="fromDate"
@@ -184,7 +184,7 @@ const LeaveApplicationForm: React.FC<LeaveApplicationFormProps> = ({ onSubmit, b
             <FormItem>
               <FormLabel>Reason</FormLabel>
               <FormControl>
-                <Textarea 
+                <Textarea
                   placeholder="Please provide a detailed reason for your leave..."
                   className="resize-none"
                   {...field}
@@ -195,8 +195,8 @@ const LeaveApplicationForm: React.FC<LeaveApplicationFormProps> = ({ onSubmit, b
           )}
         />
 
-        <Button 
-          type="submit" 
+        <Button
+          type="submit"
           className="w-full"
           disabled={calculateLeaveDays() > getAvailableLeaves(selectedLeaveType)}
         >

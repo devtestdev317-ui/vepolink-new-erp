@@ -3,7 +3,7 @@ import React from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
-import type{ AttendanceRecord, LeaveBalance, ApprovalStatus } from '@/types/attendance';
+import type { AttendanceRecord, LeaveBalance, ApprovalStatus } from '@/types/attendance';
 
 interface LeaveBalancesProps {
   records: AttendanceRecord[];
@@ -22,7 +22,7 @@ const LeaveBalances: React.FC<LeaveBalancesProps> = ({ records, balances }) => {
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="text-center p-4 border rounded-lg bg-blue-50">
           <div className="text-2xl font-bold text-blue-600">{balances.cl}</div>
           <div className="text-sm text-gray-600">CL Available</div>

@@ -112,7 +112,7 @@ export const GoalsTracking: React.FC<GoalsTrackingProps> = ({
   };
 
   return (
-    <Card>
+    <Card className=''>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Target className="h-5 w-5" />
@@ -232,11 +232,11 @@ export const GoalsTracking: React.FC<GoalsTrackingProps> = ({
         {/* Goals List */}
         <div className="space-y-4">
           {goals.map((goal) => (
-            <Card key={goal.id}>
+            <Card key={goal.id} className='p-0'>
               <CardContent className="p-4">
-                <div className="flex justify-between items-start mb-4">
+                <div className="flex flex-wrap justify-between items-start mb-4">
                   <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
+                    <div className="flex flex-wrap items-center gap-2 mb-2">
                       <h4 className="font-semibold">{goal.title}</h4>
                       <Badge variant={getStatusVariant(goal.status)}>
                         {goal.status.replace('-', ' ').toUpperCase()}
@@ -244,11 +244,11 @@ export const GoalsTracking: React.FC<GoalsTrackingProps> = ({
                       <Badge variant="outline">{goal.category}</Badge>
                     </div>
                     <p className="text-sm text-muted-foreground mb-2">{goal.description}</p>
-                    <div className="flex items-center gap-4 text-sm">
-                      <span>Target: {goal.target}</span>
-                      <span>Weightage: {goal.weightage}%</span>
+                    <div className="flex flex-wrap items-center gap-4 text-sm">
+                      <span><strong>Target</strong>: {goal.target}</span>
+                      <span><strong>Weightage</strong>: {goal.weightage}%</span>
                       <span>
-                        Period: {format(goal.startDate, 'MMM dd')} - {format(goal.endDate, 'MMM dd, yyyy')}
+                        <strong>Period</strong>: {format(goal.startDate, 'MMM dd')} - {format(goal.endDate, 'MMM dd, yyyy')}
                       </span>
                     </div>
                   </div>

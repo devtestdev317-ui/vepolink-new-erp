@@ -18,6 +18,7 @@ import {
     Plus,
     Download
 } from 'lucide-react';
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import type {
     PerformanceReview,
     Goal,
@@ -185,9 +186,9 @@ export default function PerformanceManagementPage() {
     const [receivedFeedback, setReceivedFeedback] = useState<Feedback[]>([]);
     const [activeTab, setActiveTab] = useState('overview');
 
-    useEffect(()=>{
-        setReceivedFeedback(mockReceivedFeedback);  
-    },[])
+    useEffect(() => {
+        setReceivedFeedback(mockReceivedFeedback);
+    }, [])
 
     const handleSubmitReview = (review: PerformanceReview) => {
         setPerformanceReviews(prev => [...prev, review]);
@@ -243,8 +244,8 @@ export default function PerformanceManagementPage() {
 
     return (
         <div className="container mx-auto p-6 space-y-6">
-            <div className="flex justify-between items-center">
-                <div>
+            <div className="flex flex-wrap justify-between items-center">
+                <div className='md:mb-0 mb-3'>
                     <h1 className="text-3xl font-bold">Performance Management</h1>
                     <p className="text-muted-foreground">
                         Track employee performance, set goals, and manage appraisals
@@ -266,33 +267,36 @@ export default function PerformanceManagementPage() {
             </div>
 
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-                <TabsList className="grid w-full grid-cols-5">
-                    <TabsTrigger value="overview" className="flex items-center gap-2">
-                        <Target className="h-4 w-4" />
-                        Overview
-                    </TabsTrigger>
-                    <TabsTrigger value="reviews" className="flex items-center gap-2">
-                        <FileText className="h-4 w-4" />
-                        Performance Reviews
-                    </TabsTrigger>
-                    <TabsTrigger value="goals" className="flex items-center gap-2">
-                        <Target className="h-4 w-4" />
-                        Goals & Tracking
-                    </TabsTrigger>
-                    <TabsTrigger value="feedback" className="flex items-center gap-2">
-                        <Users className="h-4 w-4" />
-                        360° Feedback
-                    </TabsTrigger>
-                    <TabsTrigger value="history" className="flex items-center gap-2">
-                        <History className="h-4 w-4" />
-                        Appraisal History
-                    </TabsTrigger>
-                </TabsList>
+                <ScrollArea className="w-full rounded-md border whitespace-nowrap">
+                    <TabsList className="flex w-full whitespace-nowrap">
+                        <TabsTrigger value="overview" className="flex flex-1 items-center gap-2">
+                            <Target className="h-4 w-4" />
+                            Overview
+                        </TabsTrigger>
+                        <TabsTrigger value="reviews" className="flex flex-1 items-center gap-2">
+                            <FileText className="h-4 w-4" />
+                            Performance Reviews
+                        </TabsTrigger>
+                        <TabsTrigger value="goals" className="flex flex-1 items-center gap-2">
+                            <Target className="h-4 w-4" />
+                            Goals & Tracking
+                        </TabsTrigger>
+                        <TabsTrigger value="feedback" className="flex flex-1 items-center gap-2">
+                            <Users className="h-4 w-4" />
+                            360° Feedback
+                        </TabsTrigger>
+                        <TabsTrigger value="history" className="flex flex-1 items-center gap-2">
+                            <History className="h-4 w-4" />
+                            Appraisal History
+                        </TabsTrigger>
+                    </TabsList>
+                    <ScrollBar orientation="horizontal" />
+                </ScrollArea>
 
                 {/* Overview Tab */}
                 <TabsContent value="overview" className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                        <Card>
+                        <Card className='p-0'>
                             <CardContent className="p-6">
                                 <div className="flex items-center justify-between">
                                     <div>
@@ -304,7 +308,7 @@ export default function PerformanceManagementPage() {
                             </CardContent>
                         </Card>
 
-                        <Card>
+                        <Card className='p-0'>
                             <CardContent className="p-6">
                                 <div className="flex items-center justify-between">
                                     <div>
@@ -316,7 +320,7 @@ export default function PerformanceManagementPage() {
                             </CardContent>
                         </Card>
 
-                        <Card>
+                        <Card className='p-0'>
                             <CardContent className="p-6">
                                 <div className="flex items-center justify-between">
                                     <div>
@@ -328,7 +332,7 @@ export default function PerformanceManagementPage() {
                             </CardContent>
                         </Card>
 
-                        <Card>
+                        <Card className='p-0'>
                             <CardContent className="p-6">
                                 <div className="flex items-center justify-between">
                                     <div>
@@ -343,8 +347,8 @@ export default function PerformanceManagementPage() {
                     </div>
 
                     {/* Recent Reviews */}
-                    <Card>
-                        <CardContent className="p-6">
+                    <Card className='p-0'>
+                        <CardContent className="md:p-6 p-2">
                             <h3 className="text-lg font-semibold mb-4">Recent Performance Reviews</h3>
                             <Table>
                                 <TableHeader>
@@ -419,8 +423,8 @@ export default function PerformanceManagementPage() {
 
                 {/* Appraisal History Tab */}
                 <TabsContent value="history">
-                    <Card>
-                        <CardContent className="p-6">
+                    <Card className='p-0'>
+                        <CardContent className="md:p-6 p-2">
                             <h3 className="text-lg font-semibold mb-4">Appraisal History</h3>
                             <Table>
                                 <TableHeader>

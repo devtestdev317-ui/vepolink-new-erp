@@ -93,7 +93,7 @@ export function EmployeeForm({ employee, onSubmit, onCancel }: EmployeeFormProps
         {/* Personal Information */}
         <Card className="col-span-2 p-4 pb-6 gap-0 rounded ">
           <h3 className="text-sm font-semibold mb-4">Personal Information</h3>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
             <div className='flex flex-col gap-y-2'>
               <Label htmlFor="employeeId">Employee ID</Label>
               <Input
@@ -166,7 +166,7 @@ export function EmployeeForm({ employee, onSubmit, onCancel }: EmployeeFormProps
         {/* Contact Details */}
         <Card className="col-span-2 p-4 pb-6 gap-0 rounded ">
           <h3 className="text-sm font-semibold mb-4">Contact Details</h3>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
             <div className='flex flex-col gap-y-2'>
               <Label htmlFor="email">Email</Label>
               <Input
@@ -196,7 +196,7 @@ export function EmployeeForm({ employee, onSubmit, onCancel }: EmployeeFormProps
         {/* Address */}
         <Card className="col-span-2 p-4 pb-6 gap-0 rounded ">
           <h3 className="text-sm font-semibold mb-4">Address</h3>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
             <div className='flex flex-col gap-y-2'>
               <Label htmlFor="street">Street</Label>
               <Input
@@ -247,7 +247,7 @@ export function EmployeeForm({ employee, onSubmit, onCancel }: EmployeeFormProps
         {/* Emergency Contact */}
         <Card className="col-span-2 p-4 pb-6 gap-0 rounded ">
           <h3 className="text-sm font-semibold mb-4">Emergency Contact</h3>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
             <div className='flex flex-col gap-y-2'>
               <Label htmlFor="emergencyName">Name</Label>
               <Input
@@ -287,7 +287,7 @@ export function EmployeeForm({ employee, onSubmit, onCancel }: EmployeeFormProps
         {/* Employment Details */}
         <Card className="col-span-2 p-4 pb-6 gap-0 rounded ">
           <h3 className="text-sm font-semibold mb-4">Employment Details</h3>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
             <div className='flex flex-col gap-y-2'>
               <Label htmlFor="department">Department</Label>
               <Input
@@ -370,7 +370,7 @@ export function EmployeeForm({ employee, onSubmit, onCancel }: EmployeeFormProps
         {/* Bank Details */}
         <Card className="col-span-2 p-4 pb-6 gap-0 rounded ">
           <h3 className="text-sm font-semibold mb-4">Bank Details</h3>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
             <div className='flex flex-col gap-y-2'>
               <Label htmlFor="accountNumber">Account Number</Label>
               <Input
@@ -410,7 +410,7 @@ export function EmployeeForm({ employee, onSubmit, onCancel }: EmployeeFormProps
         {/* Statutory Details */}
         <Card className="col-span-2 p-4 pb-6 gap-0 rounded ">
           <h3 className="text-sm font-semibold mb-4">Statutory Details</h3>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
             <div className='flex flex-col gap-y-2'>
               <Label htmlFor="pan">PAN</Label>
               <Input
@@ -458,7 +458,7 @@ export function EmployeeForm({ employee, onSubmit, onCancel }: EmployeeFormProps
         {/* CTC Details */}
         <Card className="col-span-2 p-4 pb-6 gap-0 rounded ">
           <h3 className="text-sm font-semibold mb-4">CTC Details</h3>
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
             <div className='flex flex-col gap-y-2'>
               <Label htmlFor="basic">Basic</Label>
               <Input

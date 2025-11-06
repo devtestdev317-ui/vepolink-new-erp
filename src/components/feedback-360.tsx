@@ -16,7 +16,7 @@ import { format } from 'date-fns';
 import type { Feedback } from '@/types/performance';
 import { cn } from '@/lib/utils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
-
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 interface Feedback360Props {
     employees: Array<{ id: string; name: string; role: string }>;
     feedbackRequests: any[];
@@ -131,11 +131,14 @@ export const Feedback360: React.FC<Feedback360Props> = ({
     return (
         <div className="space-y-6">
             <Tabs value={activeTab} onValueChange={(value: string) => setActiveTab(value as 'request' | 'manage' | 'results')} className="space-y-6">
-                <TabsList className="grid w-full grid-cols-3">
-                    <TabsTrigger value="request">New Request</TabsTrigger>
-                    <TabsTrigger value="manage">Manage Requests</TabsTrigger>
-                    <TabsTrigger value="results">View Results</TabsTrigger>
-                </TabsList>
+                <ScrollArea className="w-full rounded-md border whitespace-nowrap">
+                    <TabsList className="flex w-full whitespace-nowrap">
+                        <TabsTrigger value="request" className='flex-1'>New Request</TabsTrigger>
+                        <TabsTrigger value="manage" className='flex-1'>Manage Requests</TabsTrigger>
+                        <TabsTrigger value="results" className='flex-1'>View Results</TabsTrigger>
+                    </TabsList>
+                    <ScrollBar orientation="horizontal" />
+                </ScrollArea>
 
                 {/* New Request Tab */}
                 <TabsContent value="request">
@@ -154,7 +157,7 @@ export const Feedback360: React.FC<Feedback360Props> = ({
                                     value={newRequest.employeeId}
                                     onValueChange={(value) => setNewRequest(prev => ({ ...prev, employeeId: value }))}
                                 >
-                                    <SelectTrigger>
+                                    <SelectTrigger className='w-full'>
                                         <SelectValue placeholder="Choose employee" />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -184,7 +187,7 @@ export const Feedback360: React.FC<Feedback360Props> = ({
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <Select onValueChange={(value) => addReviewer(value, 'manager')}>
-                                        <SelectTrigger>
+                                        <SelectTrigger className='w-full'>
                                             <SelectValue placeholder="Add Manager" />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -197,7 +200,7 @@ export const Feedback360: React.FC<Feedback360Props> = ({
                                     </Select>
 
                                     <Select onValueChange={(value) => addReviewer(value, 'peer')}>
-                                        <SelectTrigger>
+                                        <SelectTrigger className='w-full'>
                                             <SelectValue placeholder="Add Peer" />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -239,7 +242,7 @@ export const Feedback360: React.FC<Feedback360Props> = ({
 
                             {/* Feedback Questions */}
                             <div className="space-y-4">
-                                <div className="flex items-center justify-between">
+                                <div className="flex flex-wrap space-y-3 md:space-y-0 items-center justify-between">
                                     <Label>Feedback Questions</Label>
                                     <Button type="button" onClick={addQuestion} variant="outline" size="sm">
                                         <Plus className="h-4 w-4 mr-1" />
@@ -248,13 +251,13 @@ export const Feedback360: React.FC<Feedback360Props> = ({
                                 </div>
 
                                 {newRequest.questions.map((question, index) => (
-                                    <div key={index} className="flex gap-2 items-start">
+                                    <div key={index} className="flex flex-wrap relative gap-2 items-start">
                                         <Textarea
                                             value={question}
                                             onChange={(e) => updateQuestion(index, e.target.value)}
                                             placeholder={`Feedback question ${index + 1}...`}
                                             rows={2}
-                                            className="flex-1"
+                                            className="flex-1 md:p-2 pr-6 md:w-auto w-full md:text-base text-sm"
                                         />
                                         {newRequest.questions.length > 1 && (
                                             <Button
@@ -262,9 +265,9 @@ export const Feedback360: React.FC<Feedback360Props> = ({
                                                 variant="ghost"
                                                 size="sm"
                                                 onClick={() => removeQuestion(index)}
-                                                className="mt-2"
+                                                className="mt-2 md:static absolute right-0"
                                             >
-                                                <Trash2 className="h-4 w-4" />
+                                                <Trash2 className="h-4 w-4 text-red-600" />
                                             </Button>
                                         )}
                                     </div>
@@ -453,39 +456,39 @@ export const Feedback360: React.FC<Feedback360Props> = ({
                             </div>
 
                             {/* Rating Breakdown */}
-                            <Card>
-                                <CardContent className="p-6">
+                            <Card className='p-0'>
+                                <CardContent className="md:p-6 p-3">
                                     <h4 className="font-semibold mb-4">Rating Breakdown</h4>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div className="space-y-3">
-                                            <div className="flex justify-between items-center">
-                                                <span className="text-sm">Overall Rating</span>
-                                                <div className="flex items-center gap-2">
+                                            <div className="flex flex-wrap justify-between items-center">
+                                                <span className="text-sm md:w-auto w-full">Overall Rating</span>
+                                                <div className="flex items-center gap-2 md:w-auto w-full">
                                                     <span className="font-semibold">{averageRatings.overall}/5.0</span>
-                                                    <Progress value={averageRatings.overall * 20} className="w-20" />
+                                                    <Progress value={averageRatings.overall * 20} className="md:w-20 w-full" />
                                                 </div>
                                             </div>
-                                            <div className="flex justify-between items-center">
-                                                <span className="text-sm">Collaboration</span>
-                                                <div className="flex items-center gap-2">
+                                            <div className="flex flex-wrap justify-between items-center">
+                                                <span className="text-sm md:w-auto w-full">Collaboration</span>
+                                                <div className="flex items-center gap-2 md:w-auto w-full">
                                                     <span className="font-semibold">{averageRatings.collaboration}/5.0</span>
-                                                    <Progress value={averageRatings.collaboration * 20} className="w-20" />
+                                                    <Progress value={averageRatings.collaboration * 20} className="md:w-20 w-full" />
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="space-y-3">
-                                            <div className="flex justify-between items-center">
-                                                <span className="text-sm">Leadership</span>
-                                                <div className="flex items-center gap-2">
+                                            <div className="flex flex-wrap justify-between items-center">
+                                                <span className="text-sm  md:w-auto w-full">Leadership</span>
+                                                <div className="flex items-center gap-2  md:w-auto w-full">
                                                     <span className="font-semibold">{averageRatings.leadership}/5.0</span>
-                                                    <Progress value={averageRatings.leadership * 20} className="w-20" />
+                                                    <Progress value={averageRatings.leadership * 20} className="md:w-20 w-full" />
                                                 </div>
                                             </div>
-                                            <div className="flex justify-between items-center">
-                                                <span className="text-sm">Communication</span>
-                                                <div className="flex items-center gap-2">
+                                            <div className="flex flex-wrap justify-between items-center">
+                                                <span className="text-sm md:w-auto w-full">Communication</span>
+                                                <div className="flex items-center gap-2 md:w-auto w-full">
                                                     <span className="font-semibold">{averageRatings.communication}/5.0</span>
-                                                    <Progress value={averageRatings.communication * 20} className="w-20" />
+                                                    <Progress value={averageRatings.communication * 20} className="md:w-20 w-full" />
                                                 </div>
                                             </div>
                                         </div>
@@ -497,11 +500,11 @@ export const Feedback360: React.FC<Feedback360Props> = ({
                             <div className="space-y-4">
                                 <h4 className="font-semibold">Detailed Feedback</h4>
                                 {receivedFeedback.map(feedback => (
-                                    <Card key={feedback.id}>
-                                        <CardContent className="p-4">
-                                            <div className="flex justify-between items-start mb-3">
-                                                <div>
-                                                    <div className="flex items-center gap-2">
+                                    <Card key={feedback.id} className='p-0'>
+                                        <CardContent className="md:p-4 p-3">
+                                            <div className="flex flex-wrap justify-between items-start mb-3">
+                                                <div className='md:w-auto w-full'>
+                                                    <div className="flex flex-wrap items-center gap-2">
                                                         <span className="font-medium">
                                                             {feedback.anonymous ? 'Anonymous' : feedback.reviewerName}
                                                         </span>
@@ -509,19 +512,19 @@ export const Feedback360: React.FC<Feedback360Props> = ({
                                                             {feedback.reviewerType}
                                                         </Badge>
                                                     </div>
-                                                    <div className="text-sm text-muted-foreground">
+                                                    <div className="text-sm text-muted-foreground md:w-auto w-full">
                                                         {format(feedback.createdAt, 'MMM dd, yyyy')}
                                                     </div>
                                                 </div>
-                                                <div className="text-right">
-                                                    <div className="text-lg font-bold text-blue-600">
+                                                <div className="text-right md:w-auto w-full md:flex-none flex flex-wrap md:mt-0 mt-1 items-center gap-x-2">
+                                                    <div className="md:text-lg text-sm font-bold text-blue-600">
                                                         {feedback.ratings.overall}/5.0
                                                     </div>
                                                     <div className="text-sm text-muted-foreground">Overall</div>
                                                 </div>
                                             </div>
 
-                                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3 text-sm">
+                                            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-3 text-sm">
                                                 <div>
                                                     <span className="text-muted-foreground">Collaboration:</span>
                                                     <span className="ml-2 font-medium">{feedback.ratings.collaboration}/5.0</span>

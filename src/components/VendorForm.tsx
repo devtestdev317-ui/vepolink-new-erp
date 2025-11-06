@@ -169,7 +169,7 @@ const VendorForm: React.FC<VendorFormProps> = ({ onSubmit, defaultValues }) => {
                             <h3 className="text-lg font-semibold">Vendor Items</h3>
                         </div>
                         {fields.map((field, index) => (
-                            <div key={field.id} className="border rounded-lg p-6 space-y-4">
+                            <div key={field.id} className="border rounded-lg md:p-6 p-3 space-y-4">
                                 <div className="flex justify-between items-center">
                                     <h4 className="font-medium">Item {index + 1}</h4>
                                     {fields.length > 1 && (

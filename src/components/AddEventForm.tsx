@@ -77,7 +77,7 @@ export const AddEventForm: React.FC<AddEventFormProps> = ({
                             setFormData(prev => ({ ...prev, type: value }))
                         }
                     >
-                        <SelectTrigger>
+                        <SelectTrigger className='w-full py-2 min-h-[45px]'>
                             <SelectValue />
                         </SelectTrigger>
                         <SelectContent>

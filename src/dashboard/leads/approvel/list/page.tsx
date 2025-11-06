@@ -315,19 +315,19 @@ export default function ApprovalList() {
             <DashboardStrip title="Approval List" />
             <Card className="w-full p-4">
                 {/* Search and Filter Controls */}
-                <div className="flex items-center justify-between mb-4">
-                    <div className="relative">
+                <div className="flex flex-wrap items-center justify-between md:space-y-0 space-y-2.5 mb-4 md:gap-0 gap-x-1.5">
+                    <div className="relative md:w-auto w-full">
                         <Input
                             placeholder="Search across all fields..."
                             value={globalFilter ?? ""}
                             onChange={handleGlobalFilterChange}
-                            className="max-w-sm h-[40px] w-[320px] pl-[40px]"
+                            className="md:max-w-sm h-[40px] w-full md:w-[320px] pl-[40px]"
                         />
                         <Search className="size-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
                     </div>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="outline" className="h-[40px] ml-auto">
+                            <Button variant="outline" className="h-[40px] md:w-auto w-full md:ml-auto">
                                 Table Columns <ChevronDown className="ml-2 h-4 w-4" />
                             </Button>
                         </DropdownMenuTrigger>
@@ -450,7 +450,7 @@ export default function ApprovalList() {
                             <RotateCw size={22} stroke="#fff" />
                         </div>
                         <div>
-                            <DialogTitle className="leading-6">Approval</DialogTitle>
+                            <DialogTitle className="leading-6 text-left">Approval</DialogTitle>
                             <div className="leading-5 text-xs text-gray-500">
                                 Create a new approval
                             </div>
@@ -458,7 +458,7 @@ export default function ApprovalList() {
                     </DialogHeader>
 
                     <ScrollArea className="max-h-[360px] mr-[-10px] pr-[10px]">
-                        <DialogDescription className="p-2">
+                        <DialogDescription className="md:p-2">
                             <div className="w-full flex flex-col space-y-4">
                                 {/* Company Info */}
                                 <div className="flex flex-col space-y-2.5">
@@ -501,7 +501,7 @@ export default function ApprovalList() {
                                 {/* Approval Action */}
                                 <div className="w-full">
                                     <Select>
-                                        <SelectTrigger className="w-[70%]">
+                                        <SelectTrigger className="w-full">
                                             <SelectValue placeholder="Select Request" />
                                         </SelectTrigger>
                                         <SelectContent>

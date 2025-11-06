@@ -577,7 +577,7 @@ export const PerformanceReviewForm: React.FC<PerformanceReviewFormProps> = ({
                     </div>
 
                     {/* Action Buttons */}
-                    <div className="flex gap-4 pt-4">
+                    <div className="flex flex-wrap gap-4 pt-4">
                         <Button type="submit" className="flex-1">
                             Save Performance Review
                         </Button>

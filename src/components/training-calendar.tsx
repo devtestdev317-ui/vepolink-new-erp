@@ -90,7 +90,7 @@ export const TrainingCalendar: React.FC<TrainingCalendarProps> = ({
 
 
         return (
-            <div className="flex justify-between items-center mb-4 p-2 bg-gray-50 rounded-lg">
+            <div className="flex flex-wrap justify-between items-center mb-4 p-2 bg-gray-50 rounded-lg">
                 <div className="flex items-center gap-2">
                     <Button variant="outline" size="sm" onClick={goToBack}>
                         <ChevronLeft className="h-4 w-4" />
@@ -109,7 +109,7 @@ export const TrainingCalendar: React.FC<TrainingCalendarProps> = ({
                     {toolbar.label}
                 </span>
 
-                <div className="flex gap-2">
+                <div className="md:flex hidden gap-2">
                     <Button
                         variant={view === 'month' ? 'default' : 'outline'}
                         size="sm"
@@ -137,12 +137,12 @@ export const TrainingCalendar: React.FC<TrainingCalendarProps> = ({
     };
 
     return (
-        <Card>
+        <Card className='md:gap-4 gap-y-2'>
             <CardHeader>
                 <CardTitle>Training Calendar</CardTitle>
             </CardHeader>
-            <CardContent>
-                <div style={{ height: '600px' }}>
+            <CardContent className='md:px-5 px-2'>
+                <div className='h-[600px]'>
                     <Calendar
                         localizer={localizer}
                         events={events}

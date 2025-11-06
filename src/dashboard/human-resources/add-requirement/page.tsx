@@ -68,16 +68,16 @@ export default function RecruitmentPage() {
                             Manage manpower requisitions and track recruitment process
                         </p>
                     </div>
-                    <div className="flex gap-2">
-                        <Button variant="outline">
+                    <div className="flex flex-wrap gap-2">
+                        <Button variant="outline" className='md:w-auto flex-1'>
                             <Upload className="h-4 w-4 mr-2" />
                             Import
                         </Button>
-                        <Button variant="outline">
+                        <Button variant="outline" className='md:w-auto flex-1'>
                             <Download className="h-4 w-4 mr-2" />
                             Export
                         </Button>
-                        <Button onClick={() => setShowForm(true)}>
+                        <Button className='md:w-auto w-full' onClick={() => setShowForm(true)}>
                             <Plus className="h-4 w-4 mr-2" />
                             New Requisition
                         </Button>
@@ -85,8 +85,8 @@ export default function RecruitmentPage() {
                 </div>
 
                 {showForm ? (
-                    <Card className='p-0 md:p-4 lg:p-6 lg:border md:border border-none shadow-none'>
-                        <CardHeader className='lg:px-4 md:px-2 p-0'>
+                    <Card className='md:p-2 lg:p-2 lg:py-4 p-3 border  shadow-none'>
+                        <CardHeader className='w-full lg:px-4 md:px-2 p-0 @container'>
                             <CardTitle>
                                 {editingRequisition ? 'Edit Requisition' : 'Create New Requisition'}
                             </CardTitle>

@@ -5,7 +5,7 @@ import { SurveysSection } from '@/components/SurveysSection';
 import { SuggestionBox } from '@/components/SuggestionBox';
 import { useEmployeeEngagement } from '@/hooks/useEmployeeEngagement';
 import type { SurveyAnswer } from '@/types/employee-engagement';
-
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 export const EmployeeEngagementPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'calendar' | 'surveys' | 'suggestions'>('calendar');
   const {
@@ -45,36 +45,39 @@ export const EmployeeEngagementPage: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="md:text-4xl text-2xl font-bold text-gray-900 mb-4">
             Employee Engagement & Welfare
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="md:text-xl text-sm text-gray-600 max-w-3xl mx-auto">
             Celebrating our team, gathering feedback, and making our workplace better together
           </p>
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex space-x-1 mb-8 bg-white rounded-lg p-1 shadow-sm border">
-          {tabs.map((tab) => {
-            const Icon = tab.icon;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center space-x-2 px-4 py-3 rounded-md text-sm font-medium transition-colors ${activeTab === tab.id
-                  ? 'bg-blue-100 text-blue-700'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                  }`}
-              >
-                <Icon size={18} />
-                <span>{tab.label}</span>
-              </button>
-            );
-          })}
-        </div>
+        <ScrollArea className="w-full whitespace-nowrap">
+          <div className="flex w-full whitespace-nowrap space-x-1 mb-8 bg-white rounded-lg p-1 shadow-sm border">
+            {tabs.map((tab) => {
+              const Icon = tab.icon;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex items-center space-x-2 px-4 py-3 rounded-md text-sm font-medium transition-colors ${activeTab === tab.id
+                    ? 'bg-blue-100 text-blue-700'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                    }`}
+                >
+                  <Icon size={18} />
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
 
         {/* Content Sections */}
-        <div className="bg-white rounded-xl shadow-sm border p-6">
+        <div className="bg-white rounded-xl shadow-sm border md:p-6 p-3">
           {activeTab === 'calendar' && <EventCalendar
             events={events}
             onAddEvent={addEvent}

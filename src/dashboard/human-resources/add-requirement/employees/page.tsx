@@ -120,15 +120,17 @@ export default function EmployeeManagementPage() {
         // Implement Excel import logic here
         const file = event.target.files?.[0];
         if (file) {
+
             // Process Excel file
+            console.log(file.arrayBuffer())
             console.log('Processing file:', file.name);
         }
     };
 
     return (
         <div className="container mx-auto p-6">
-            <div className="flex justify-between items-center mb-6">
-                <div>
+            <div className="flex flex-wrap justify-between items-center mb-6">
+                <div className='md:mb-0 lg:mb-0 mb-4'>
                     <h1 className="text-3xl font-bold">Employee Master Data</h1>
                     <p className="text-muted-foreground">Manage employee profiles and information</p>
                 </div>
@@ -151,7 +153,7 @@ export default function EmployeeManagementPage() {
                                 Add Employee
                             </Button>
                         </DialogTrigger>
-                        <DialogContent style={{ width: "892px", maxWidth: "none" }} className="max-w-none w-[992px] max-h-[90vh] overflow-y-auto">
+                        <DialogContent style={{ maxWidth: "892px" }} className="max-w-none md:max-h-[90vh] max-h-[80vh] w-[90%] overflow-y-auto">
                             <DialogHeader>
                                 <DialogTitle>
                                     {editingEmployee ? 'Edit Employee' : 'Add New Employee'}

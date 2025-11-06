@@ -10,6 +10,7 @@ import type { TrainingProgram, TrainingSession, TrainingAttendance, SkillDevelop
 import { Plus, Calendar, FileText, BarChart } from 'lucide-react';
 import { PDFService } from '@/lib/pdf-service';
 // Mock data
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 const mockTrainingPrograms: TrainingProgram[] = [
   {
     id: '1',
@@ -214,8 +215,8 @@ export default function TrainingPage() {
   return (
     <div className="w-full p-3 md:p-7">
       <div className="container mx-auto py-6 space-y-6">
-        <div className="flex justify-between items-center">
-          <div>
+        <div className="flex flex-wrap justify-between items-center">
+          <div className='md:mb-0 mb-3'>
             <h1 className="text-3xl font-bold">Training & Development</h1>
             <p className="text-muted-foreground">
               Plan training programs, track attendance, and generate skill development reports
@@ -237,22 +238,24 @@ export default function TrainingPage() {
             </Button>
           </div>
         </div>
-
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="calendar" className="flex items-center gap-2">
-              <Calendar className="h-4 w-4" />
-              Calendar
-            </TabsTrigger>
-            <TabsTrigger value="programs" className="flex items-center gap-2">
-              <FileText className="h-4 w-4" />
-              Programs
-            </TabsTrigger>
-            <TabsTrigger value="create" className="flex items-center gap-2">
-              <Plus className="h-4 w-4" />
-              {editingTraining ? 'Edit Program' : 'Create Program'}
-            </TabsTrigger>
-          </TabsList>
+          <ScrollArea className="w-full rounded-md border whitespace-nowrap">
+            <TabsList className="flex w-full whitespace-nowrap">
+              <TabsTrigger value="calendar" className="flex flex-1 items-center gap-2">
+                <Calendar className="h-4 w-4" />
+                Calendar
+              </TabsTrigger>
+              <TabsTrigger value="programs" className="flex flex-1 items-center gap-2">
+                <FileText className="h-4 w-4" />
+                Programs
+              </TabsTrigger>
+              <TabsTrigger value="create" className="flex flex-1 items-center gap-2">
+                <Plus className="h-4 w-4" />
+                {editingTraining ? 'Edit Program' : 'Create Program'}
+              </TabsTrigger>
+            </TabsList>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
 
           <TabsContent value="calendar">
             <TrainingCalendar

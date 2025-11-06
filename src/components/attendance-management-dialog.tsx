@@ -141,24 +141,24 @@ export const AttendanceManagementDialog: React.FC<AttendanceManagementDialogProp
         saveAs(blob, `${training.title.replace(/\s+/g, '_')}_attendance.xlsx`);
     };
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent style={{ maxWidth: '992px', width: '100%' }} >
-                <DialogHeader>
-                    <DialogTitle className="flex items-center justify-between">
+        <Dialog open={open} onOpenChange={onOpenChange} >
+            <DialogContent style={{ maxWidth: '992px', width: '90%' }} className='block' >
+                <DialogHeader className='md:mb-0 mb-3'>
+                    <DialogTitle className="flex md:items-center justify-between text-left">
                         <span>Attendance - {training.title}</span>
-                        <Button variant="outline" size="sm" className='md:mt-4' onClick={handleExportAttendance}>
-                            <Download className="h-4 w-4 mr-2" />
-                            Export
-                        </Button>
                     </DialogTitle>
-                    <DialogDescription>
+                    <DialogDescription className='text-left'>
                         Manage and track attendance for this training program
                     </DialogDescription>
+                    <Button variant="outline" size="sm" className='md:mb-4 md:mt-[-20px] w-[130px] ml-auto mr-0' onClick={handleExportAttendance}>
+                        <Download className="h-4 w-4 mr-2" />
+                        Export
+                    </Button>
                 </DialogHeader>
 
                 <div className="space-y-4">
                     {/* Attendance Summary */}
-                    <div className="grid grid-cols-3 gap-4 p-4 bg-muted rounded-lg">
+                    <div className="grid md:grid-cols-3 grid-cols-2 gap-4 p-4 bg-muted rounded-lg">
                         <div className="text-center">
                             <div className="text-2xl font-bold text-green-600">
                                 {trainingAttendance.filter(att => att.attendanceStatus === 'present').length}
