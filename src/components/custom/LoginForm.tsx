@@ -49,7 +49,7 @@ export function LoginForm() {
                     onClick: () => console.log("Success"),
                 },
             })
-            navigate("/dashboard");
+            navigate("/admin");
         }
         else {
             toast.error("Login Failed", {

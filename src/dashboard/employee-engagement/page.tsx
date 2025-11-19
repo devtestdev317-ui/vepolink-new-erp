@@ -6,7 +6,7 @@ import { SuggestionBox } from '@/components/SuggestionBox';
 import { useEmployeeEngagement } from '@/hooks/useEmployeeEngagement';
 import type { SurveyAnswer } from '@/types/employee-engagement';
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
-export const EmployeeEngagementPage: React.FC = () => {
+const EmployeeEngagementPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'calendar' | 'surveys' | 'suggestions'>('calendar');
   const {
     events,
@@ -98,3 +98,6 @@ export const EmployeeEngagementPage: React.FC = () => {
     </div>
   );
 };
+
+
+export default EmployeeEngagementPage

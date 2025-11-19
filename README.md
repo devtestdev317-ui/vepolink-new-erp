@@ -67,3 +67,4 @@ export default defineConfig([
   },
 ])
 ```
+<!-- npx prisma dev  npx prisma studio -->

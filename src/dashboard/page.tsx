@@ -204,11 +204,11 @@ export default function DashboardPage() {
                     id: "1", title: "Add new Vendor", href: "vendor/add-new", icon: <Eye size={"18px"} className="ml-0" />
                 },
                 {
-                    id: "2", title: "List of Vendor", href: "vendor/list", icon: <Eye size={"18px"} className="ml-0" />
+                    id: "2", title: "List of Vendor", href: "vendor", icon: <Eye size={"18px"} className="ml-0" />
                 }
             ]
         },
-    ]
+    ];
     return Section ? (
         <div className=" p-4 md:pt-6 md:pb-0  md:min-h-[calc(100vh-48px)]">
             <div className="bg-white w-full overflow-hidden md:min-h-[calc(100vh-75px)]">

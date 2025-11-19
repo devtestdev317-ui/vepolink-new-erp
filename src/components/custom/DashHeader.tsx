@@ -15,7 +15,7 @@ export default function DashboardHeader() {
             name: "Dashboard"
         },
         {
-            href: "/master",
+            href: "master",
             name: "Master Data"
         }
     ]
